@@ -7,6 +7,8 @@ This code was sitting somewhat dormant in a project folder, so if you'd like to 
 
 I’ve stripped out any game specific things, but I have left in placeholder functions for connecting to a server; this can be used to extend commands, and provide tamper proof online functionality.
 
+<a href="http://ianisted.github.io/jquery-cli/">Demo</a>
+
 ## Screenshots
 
 The interface
