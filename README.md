@@ -7,6 +7,15 @@ This code was sitting somewhat dormant in a project folder, so if you'd like to 
 
 I’ve stripped out any game specific things, but I have left in placeholder functions for connecting to a server; this can be used to extend commands, and provide tamper proof online functionality.
 
+## Screenshots
+
+The interface
+<img src="https://raw.githubusercontent.com/ianisted/jquery-cli/master/cli.jpg" width="400" />
+
+The easter egg
+<img src="https://raw.githubusercontent.com/ianisted/jquery-cli/master/1337.jpg" width="400" />
+
+
 ## Available commands
 
 - time (displays the current time as a unix timestamp)
