@@ -20,7 +20,7 @@ I’ve stripped out any game specific things, but I have left in placeholder fun
 
 ## Future
 
-The javascript code is currently very depentant on the HTML.
+The javascript code is currently very dependant on the HTML.
 At some point, I'll make this behave more like a plugin, allowing it to be dropped into an existing interface with greater ease.
 
 ## Quirks
@@ -30,10 +30,9 @@ There are a few quirks and sloppy bits of coding.
 
 E.g. `$(terminal).scrollTop(900000);` yes I know I'll fix this later ;)
 
-## License
-
 Feel free to use this in your project, but please follow the license.
 
+## License
 
 The MIT License (MIT)
 
