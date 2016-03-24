@@ -10,9 +10,11 @@ I’ve stripped out any game specific things, but I have left in placeholder fun
 ## Screenshots
 
 The interface
+
 <img src="https://raw.githubusercontent.com/ianisted/jquery-cli/master/cli.jpg" width="400" />
 
 The easter egg
+
 <img src="https://raw.githubusercontent.com/ianisted/jquery-cli/master/1337.jpg" width="400" />
 
 
