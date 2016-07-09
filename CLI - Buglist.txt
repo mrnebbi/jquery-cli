@@ -1,0 +1,2 @@
+1. Up/down arrows don't work on first press when alternating between them. Think this is something to do with how the +1/-1 is handled in the command history "stack".
+2. Would be nice to add a feature where clicking anywhere brings focus back to CLI element of CSS.
