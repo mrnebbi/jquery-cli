@@ -134,6 +134,10 @@ var Game = {
 					});
 					logger(historylog);
 					break;
+				case "help": case "/?": case "?":
+				//Basic help function
+					logger('Help, we all need some,<br />Avaliable Commands<br /> - About<br /> - About-Licence<br /> - Clear<br /> - Connect<br /> - Echo<br /> - History<br /> - Help<br /> - Time');
+					break;
 				default:
 				//If command not recognized by CLI then send on.
 					Game.Cmd.send(e);
