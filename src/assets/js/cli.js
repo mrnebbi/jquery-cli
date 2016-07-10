@@ -20,8 +20,8 @@ function logger(string,logID,status) {
 		} else {
 			$(terminal + ' ul').append('<li id="logger-id-' + logID + '"'  + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
 		}
-		
-	} else { 
+
+	} else {
 		$(terminal + ' ul').append('<li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
 	};
 	$(terminal).scrollTop(900000);
@@ -35,9 +35,9 @@ var connection = false; // Boolean to tell the system if a server connection has
 var Game = {
 	init:function() {
 		// Initialise the game, and begin listening for key presses.
-	
+
 		logger('Application version: ' + version);
-		
+
 		$('.cmd').keydown(function(event) {
 				switch(event.which) {
 					case 13: //Enter Key
@@ -64,15 +64,15 @@ var Game = {
 					//Reserved for Tab-complete
 						event.preventDefault();
 						break;
-					
-				}	
+
+				}
 		});
 	},
 	Cmd: {
 		input:function(e) {
-			
+
 			var input = e;
-			
+
 			//Naughty script catcher
 			// looks for "<", and prevents bad guys!
 			if (input.toLowerCase().indexOf("<") >= 0) {
@@ -80,17 +80,17 @@ var Game = {
 				$('.cmd').val('');
 				return false;
 			}
-			
-			//Adds input to Command History		
+
+			//Adds input to Command History
 			Game.Cmd.History.list.push(input);
-			
+
 			//splits string on first "space"
-			// i.e. [cmd] [string] 
+			// i.e. [cmd] [string]
 			// converts cmd part to lowercase.
 			// string is not converted to lowercase
 			var cmd = $('.cmd').val().split(' ')[ 0 ].toLowerCase();
 			var string = input.substr(input.indexOf(" ") + 1);
-			
+
 			//Look up [cmd] and take action
 			switch(cmd) {
 				case "connect":
@@ -136,16 +136,17 @@ var Game = {
 					break;
 				case "help": case "/?": case "?":
 				//Basic help function
-					logger('Help, we all need some,<br />Avaliable Commands<br /> - About<br /> - About-Licence<br /> - Clear<br /> - Connect<br /> - Echo<br /> - History<br /> - Help<br /> - Time');
+					//logger('Help, we all need some,<br />Avaliable Commands<br /> - About<br /> - About-Licence<br /> - Clear<br /> - Connect<br /> - Echo<br /> - History<br /> - Help<br /> - Time');
+					Game.help(string);
 					break;
 				default:
 				//If command not recognized by CLI then send on.
 					Game.Cmd.send(e);
 					break;
 			}
-				
+
 			$('.cmd').val('');
-		
+
 		},
 		send:function(e) {
 			//Sends command to server to be processed
@@ -160,7 +161,7 @@ var Game = {
 			previous:function() {
 				var list = Game.Cmd.History.list;
 				var pos = Game.Cmd.History.list_position;
-				
+
 					if (pos == 0) {
 						pos = list.length - 1;
 						Game.Cmd.History.list_position = pos;
@@ -170,12 +171,12 @@ var Game = {
 						Game.Cmd.History.list_position = pos;
 						$('.cmd').val(Game.Cmd.History.list[pos]);
 					}
-				
+
 			},
 			next:function() {
 				var list = Game.Cmd.History.list;
 				var pos = Game.Cmd.History.list_position;
-				
+
 					if (pos == 0) {
 						//Game.Cmd.History.list_position = list.length - 1;
 						//pos = Game.Cmd.History.list_position;
@@ -192,16 +193,32 @@ var Game = {
 							Game.Cmd.History.list_position = pos;
 						}
 					}
-				
+
 			}
 		}
-		
-		
+
+
 	},
 	connect:function(params) {
 		//Connect to server
-		// not implemented, hence fails	
+		// not implemented, hence fails
 		logger('Could not connect. Application has not been setup to connect to a server.');
-		 
+
+	},
+	help:function(e) {
+		if (e.toLowerCase() == "help") {
+			e = "";
+		}
+		if (e.length > 0) {
+			logger(helpDirectory[e]);
+		} else {
+			var helplist = "";
+
+			$.each(helpDirectory, function(key, value) {
+				helplist = helplist + value + '<br />';
+			});
+
+			logger('<br />Available commands:<br />' + helplist + '<br />');
+		}
 	}
 }
