@@ -136,8 +136,7 @@ var Game = {
 					break;
 				case "help": case "/?": case "?":
 				//Basic help function
-					//logger('Help, we all need some,<br />Avaliable Commands<br /> - About<br /> - About-Licence<br /> - Clear<br /> - Connect<br /> - Echo<br /> - History<br /> - Help<br /> - Time');
-					Game.help(string);
+					logger(BasicFunctions.help(string));
 					break;
 				default:
 				//If command not recognized by CLI then send on.
@@ -203,22 +202,5 @@ var Game = {
 		//Connect to server
 		// not implemented, hence fails
 		logger('Could not connect. Application has not been setup to connect to a server.');
-
-	},
-	help:function(e) {
-		if (e.toLowerCase() == "help") {
-			e = "";
-		}
-		if (e.length > 0) {
-			logger(helpDirectory[e]);
-		} else {
-			var helplist = "";
-
-			$.each(helpDirectory, function(key, value) {
-				helplist = helplist + value + '<br />';
-			});
-
-			logger('<br />Available commands:<br />' + helplist + '<br />');
-		}
 	}
 }
