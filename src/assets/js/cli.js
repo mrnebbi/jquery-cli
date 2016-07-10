@@ -32,7 +32,7 @@ var connection = false; // Boolean to tell the system if a server connection has
 var echosetting = true; //echo nominaly set as true
 
 
-var Game = {
+var CMDPROMPT = {
 	init:function() {
 		// Initialise the game, and begin listening for key presses.
 
@@ -44,7 +44,7 @@ var Game = {
 						if ($('.cmd').val() == "") {
 							return false;
 						}
-						Game.Cmd.input($('.cmd').val());
+						CMDPROMPT.Cmd.input($('.cmd').val());
 						break;
 					case 27: //Escape Key
 					//Clears current line
@@ -52,12 +52,12 @@ var Game = {
 						break;
 					case 38: //Up Arrow
 					//Rotates through Command History
-						Game.Cmd.History.previous();
+						CMDPROMPT.Cmd.History.previous();
 						event.preventDefault();
 						break;
 					case 40: //Down Arrow
 					//Rotates through Command History
-						Game.Cmd.History.next();
+						CMDPROMPT.Cmd.History.next();
 						event.preventDefault();
 						break;
 					case 9: //Tab
@@ -82,7 +82,7 @@ var Game = {
 			}
 
 			//Adds input to Command History
-			Game.Cmd.History.list.push(input);
+			CMDPROMPT.Cmd.History.list.push(input);
 
 			//splits string on first "space"
 			// i.e. [cmd] [string]
@@ -97,9 +97,9 @@ var Game = {
 				//Attempts to connect to server
 				// not implemented
 					if (string == "true") {
-						Game.connect(true);
+						CMDPROMPT.connect(true);
 					} else {
-						Game.connect();
+						CMDPROMPT.connect();
 					}
 					break;
 				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
@@ -126,7 +126,7 @@ var Game = {
 				case "history":
 				//Prints history of commands
 					historylog = "";
-					$.each(Game.Cmd.History.list, function(i,val) {
+					$.each(CMDPROMPT.Cmd.History.list, function(i,val) {
 						historylog = historylog + i + ': ' + val + "<br />";
 					});
 					logger(historylog);
@@ -137,7 +137,7 @@ var Game = {
 					break;
 				default:
 				//If command not recognized by CLI then send on.
-					Game.Cmd.send(e);
+					CMDPROMPT.Cmd.send(e);
 					break;
 			}
 
@@ -155,38 +155,38 @@ var Game = {
 			list: [],
 			list_position:0,
 			previous:function() {
-				var list = Game.Cmd.History.list;
-				var pos = Game.Cmd.History.list_position;
+				var list = CMDPROMPT.Cmd.History.list;
+				var pos = CMDPROMPT.Cmd.History.list_position;
 
 					if (pos == 0) {
 						pos = list.length - 1;
-						Game.Cmd.History.list_position = pos;
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						CMDPROMPT.Cmd.History.list_position = pos;
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 					} else {
 						pos = pos - 1;
-						Game.Cmd.History.list_position = pos;
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						CMDPROMPT.Cmd.History.list_position = pos;
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 					}
 
 			},
 			next:function() {
-				var list = Game.Cmd.History.list;
-				var pos = Game.Cmd.History.list_position;
+				var list = CMDPROMPT.Cmd.History.list;
+				var pos = CMDPROMPT.Cmd.History.list_position;
 
 					if (pos == 0) {
-						//Game.Cmd.History.list_position = list.length - 1;
-						//pos = Game.Cmd.History.list_position;
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						//CMDPROMPT.Cmd.History.list_position = list.length - 1;
+						//pos = CMDPROMPT.Cmd.History.list_position;
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 						pos = pos + 1;
-						Game.Cmd.History.list_position = pos;
+						CMDPROMPT.Cmd.History.list_position = pos;
 					} else if (pos < list.length) {
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 						if (pos != list.length - 1) {
 							pos = pos + 1;
-							Game.Cmd.History.list_position = pos;
+							CMDPROMPT.Cmd.History.list_position = pos;
 						} else {
 							pos = 0;
-							Game.Cmd.History.list_position = pos;
+							CMDPROMPT.Cmd.History.list_position = pos;
 						}
 					}
 
