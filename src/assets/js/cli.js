@@ -34,7 +34,7 @@ var echosetting = true; //echo nominaly set as true
 
 var CMDPROMPT = {
 	init:function() {
-		// Initialise the game, and begin listening for key presses.
+		// Initialise the command prompt window, and begin listening for key presses.
 
 		logger('Application version: ' + version);
 
