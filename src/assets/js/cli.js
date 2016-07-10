@@ -108,7 +108,7 @@ var Game = {
 					break;
 				case "time": case "clock": case "date":
 				//Displays unix timecode
-					logger('<span class="error"><strong>' + cmd + '</strong>: ' + $.now() + '</span>');
+					BasicFunctions.echo(BasicFunctions.timestamp(string));
 					break;
 				case "print": case "echo":
 				//Echos [string]
