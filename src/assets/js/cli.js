@@ -29,7 +29,7 @@ function logger(string,logID,status) {
 
 
 var connection = false; // Boolean to tell the system if a server connection has been made
-
+var echosetting = true; //echo nominaly set as true
 
 
 var Game = {
@@ -112,7 +112,8 @@ var Game = {
 					break;
 				case "print": case "echo":
 				//Echos [string]
-					logger('<strong class="muted">' + string + '</strong>');
+					//logger('<strong class="muted">' + string + '</strong>');
+					BasicFunctions.echo(string);
 					break;
 				case "about":
 				//Prints about info
@@ -136,7 +137,7 @@ var Game = {
 					break;
 				case "help": case "/?": case "?":
 				//Basic help function
-					logger(BasicFunctions.help(string));
+					BasicFunctions.echo(BasicFunctions.help(string));
 					break;
 				default:
 				//If command not recognized by CLI then send on.
