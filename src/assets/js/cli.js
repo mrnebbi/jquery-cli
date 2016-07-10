@@ -104,7 +104,7 @@ var Game = {
 					break;
 				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
 				//Secret Hacker colours enabled!
-					$('html').toggleClass('hacker');
+					BasicFunctions.hacker(string);
 					break;
 				case "time": case "clock": case "date":
 				//Displays unix timecode
@@ -115,13 +115,13 @@ var Game = {
 					//logger('<strong class="muted">' + string + '</strong>');
 					BasicFunctions.echo(string);
 					break;
-				case "about":
+				case "about": case "info":
 				//Prints about info
 					BasicFunctions.echo(BasicFunctions.about(string));
 					break;
 				case "clear": case "cls":
 				//Clears terminal
-					BasicFunctions.cls(string)
+					BasicFunctions.cls(string);
 					break;
 				case "history":
 				//Prints history of commands
