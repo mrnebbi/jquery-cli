@@ -121,7 +121,7 @@ var BasicFunctions = {
       //returns uk date 23/07/2015
         stdout = "" + d.toLocaleDateString("en-GB");
         break;
-      case "time":
+      case "":
       //returns uk time 20:01:53
         stdout = "" + d.toLocaleTimeString("en-GB");
         break;
