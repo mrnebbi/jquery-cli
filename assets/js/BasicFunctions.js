@@ -20,18 +20,22 @@ var BasicFunctions = {
     /*Send about information to stdout
     */
     var stdout = '';
-    if (stdin.toLowerCase() == "about") {
-      stdin = "";
-    }
     switch(stdin.toLowerCase()) {
+      case "help":
+        stdout = '<br />HELP: ABOUT []<br />' + '<br  />  ABOUT : Displays basic about information<br />  ABOUT [LICENCE] : Displays licence specifc information<br />';
+        break;
       case "licence":
       //show licence agreement
         stdout = '<em>The MIT License (MIT)<br /><br />Copyright (c) 2016 Ian Isted<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: <br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</em>';
         break;
-      default:
+      case "":
         stdout = '<em>CLI version 1.0.<br />Built by <a href="http://twitter.com/ianisted" target="_blank">@ianisted</a>.<br />Released under <a href="https://github.com/ianisted/jquery-cli/blob/master/LICENSE" target="_blank">MIT license</a>. Type <strong>about license</strong> to see the license.</strong></em>';
         break;
+      default:
+        stdout = "ERROR: This is not a valid command. Please see 'About Help'"
+        break;
     }
+    BasicFunctions.echo(stdout);
     return stdout;
   },
   cls:function(stdin){
@@ -44,16 +48,23 @@ var BasicFunctions = {
     stdout = "clear done";
     return stdout;
   },
+  connect:function(stdin){
+    //Attempts to connect to server
+    // not implemented
+    var stdout = 'Could not connect. Application has not been setup to connect to a server.';
+    BasicFunctions.echo(stdout);
+    return stdout;
+  },
   echo:function(stdin){
     /*Echo's stdin to stdout
     Echo can be turned ON/OFF with Echo On & Echo Off
     If Echo is On then will also Echo Command to Terminal.
     */
     var stdout = "";
-    if (stdin.toLowerCase() == "echo") {
-      stdin = "";
-    }
     switch(stdin.toLowerCase()) {
+      case "help":
+        stdout = '<br />HELP: ECHO []<br />' + '<br  />  ECHO [stdin] : Echo stdin to stdout and prints to terminal<br />  ECHO [ON/OFF] : Allows echo to print to terminal. std still goes to stdout<br />  ECHO : Displays current Echo state (ECHO ON/OFF)<br /> ';
+        break;
       case "off":
       //Turn Echo Off
         stdout = "ECHO OFF";
@@ -98,9 +109,6 @@ var BasicFunctions = {
     */
     var stdout = "";
     //special "help help" case;
-    if (stdin.toLowerCase() == "help") {
-      stdin = "";
-    }
     if (stdin.length > 0) {
       //give specific help on [stdin]
       stdout = helpDirectory[stdin];
@@ -112,6 +120,7 @@ var BasicFunctions = {
       });
       stdout = '<br />Available commands:<br />' + helplist + '<br />';
     }
+    BasicFunctions.echo(stdout);
     return(stdout);
   },
   timestamp:function(stdin){
@@ -120,8 +129,32 @@ var BasicFunctions = {
     */
     //BROKEN FUNCTION
     var stdout = "";
-    stdout = "get a watch - mines broken!!";
-    //'<span class="error"><strong>' + cmd + '</strong>: ' + $.now() + '</span>';
+    var d = new Date();
+    switch(stdin.toLowerCase()) {
+      case "help":
+        stdout = '<br />HELP: TIME []<br />' + '<br  />  TIME : Displays current time in UK format<br />  TIME [STAMP] : Displays current unix time<br />  TIME [DATE] : Displays current date in UK format<br />  TIME [FULL] : Displays current time & date in UK format';
+        break;
+      case "stamp":
+      //returns unix time (milliseconds since midnight on 1st Jan 1970)
+        stdout = "" + d.getTime();
+        break;
+      case "date":
+      //returns uk date 23/07/2015
+        stdout = "" + d.toLocaleDateString("en-GB");
+        break;
+      case "":
+      //returns uk time 20:01:53
+        stdout = "" + d.toLocaleTimeString("en-GB");
+        break;
+      case "full":
+      //returns uk date & time 23/07/2016, 20:04:08
+        stdout = "" + d.toLocaleString("en-GB");
+        break;
+      default:
+        stdout = "ERROR: This is not a valid command. Please see 'Time Help'"
+        break;
+    }
+    BasicFunctions.echo(stdout);
     return stdout;
   }
 };

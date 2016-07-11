@@ -22,7 +22,7 @@ function logger(string,logID,status) {
 		}
 
 	} else {
-		$(terminal + ' ul').append('<li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
+		$(terminal + ' ul').append('<font color = lightblue><li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span></font> ' + string + '</li>');
 	};
 	$(terminal).scrollTop(900000);
 }
@@ -70,7 +70,10 @@ var CMDPROMPT = {
 	},
 	Cmd: {
 		input:function(e) {
-
+			/*Checks command inputs are not script
+			  and are not blank.
+				Then executes action based on input command.
+			*/
 			var input = e;
 
 			//Naughty script catcher
@@ -83,24 +86,23 @@ var CMDPROMPT = {
 
 			//Adds input to Command History
 			CMDPROMPT.Cmd.History.list.push(input);
-
+			logger(input);
 			//splits string on first "space"
 			// i.e. [cmd] [string]
 			// converts cmd part to lowercase.
 			// string is not converted to lowercase
 			var cmd = $('.cmd').val().split(' ')[ 0 ].toLowerCase();
-			var string = input.substr(input.indexOf(" ") + 1);
+			var string = $('.cmd').val().toLowerCase();
+			if (string != cmd) {
+				string = input.substr(input.indexOf(" ") + 1);
+			} else {
+				string = "";
+			}
 
 			//Look up [cmd] and take action
 			switch(cmd) {
 				case "connect":
-				//Attempts to connect to server
-				// not implemented
-					if (string == "true") {
-						CMDPROMPT.connect(true);
-					} else {
-						CMDPROMPT.connect();
-					}
+					BasicFunctions.connect(string);
 					break;
 				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
 				//Secret Hacker colours enabled!
@@ -108,7 +110,7 @@ var CMDPROMPT = {
 					break;
 				case "time": case "clock": case "date":
 				//Displays unix timecode
-					BasicFunctions.echo(BasicFunctions.timestamp(string));
+					BasicFunctions.timestamp(string);
 					break;
 				case "print": case "echo":
 				//Echos [string]
@@ -117,7 +119,7 @@ var CMDPROMPT = {
 					break;
 				case "about": case "info":
 				//Prints about info
-					BasicFunctions.echo(BasicFunctions.about(string));
+					BasicFunctions.about(string);
 					break;
 				case "clear": case "cls":
 				//Clears terminal
@@ -133,7 +135,7 @@ var CMDPROMPT = {
 					break;
 				case "help": case "/?": case "?":
 				//Basic help function
-					BasicFunctions.echo(BasicFunctions.help(string));
+					BasicFunctions.help(string);
 					break;
 				default:
 				//If command not recognized by CLI then send on.
@@ -189,15 +191,7 @@ var CMDPROMPT = {
 							CMDPROMPT.Cmd.History.list_position = pos;
 						}
 					}
-
 			}
 		}
-
-
 	},
-	connect:function(params) {
-		//Connect to server
-		// not implemented, hence fails
-		logger('Could not connect. Application has not been setup to connect to a server.');
-	}
 }
