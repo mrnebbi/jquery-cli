@@ -20,8 +20,8 @@ function logger(string,logID,status) {
 		} else {
 			$(terminal + ' ul').append('<li id="logger-id-' + logID + '"'  + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
 		}
-		
-	} else { 
+
+	} else {
 		$(terminal + ' ul').append('<li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
 	};
 	$(terminal).scrollTop(900000);
@@ -29,147 +29,175 @@ function logger(string,logID,status) {
 
 
 var connection = false; // Boolean to tell the system if a server connection has been made
+var echosetting = true; //echo nominaly set as true
 
 
-
-var Game = {
+var CMDPROMPT = {
 	init:function() {
-		// Initialise the game, and begin listening for key presses.
-	
+		// Initialise the command prompt window, and begin listening for key presses.
+
 		logger('Application version: ' + version);
-		
+
 		$('.cmd').keydown(function(event) {
 				switch(event.which) {
-					case 13:
+					case 13: //Enter Key
 						if ($('.cmd').val() == "") {
 							return false;
 						}
-						Game.Cmd.input($('.cmd').val());
+						CMDPROMPT.Cmd.input($('.cmd').val());
 						break;
-					case 27:
+					case 27: //Escape Key
+					//Clears current line
 						$('.cmd').val('');
 						break;
-					case 38:
-						Game.Cmd.History.previous();
+					case 38: //Up Arrow
+					//Rotates through Command History
+						CMDPROMPT.Cmd.History.previous();
 						event.preventDefault();
 						break;
-					case 40:
-						Game.Cmd.History.next();
+					case 40: //Down Arrow
+					//Rotates through Command History
+						CMDPROMPT.Cmd.History.next();
 						event.preventDefault();
 						break;
-					
-				}	
+					case 9: //Tab
+					//Reserved for Tab-complete
+						event.preventDefault();
+						break;
+
+				}
 		});
 	},
 	Cmd: {
 		input:function(e) {
-			
+
 			var input = e;
-					
-			if (input.toLowerCase().indexOf("<script") >= 0) {
+
+			//Naughty script catcher
+			// looks for "<", and prevents bad guys!
+			if (input.toLowerCase().indexOf("<") >= 0) {
 				logger("Not cool dude");
 				$('.cmd').val('');
 				return false;
 			}
-					
-			Game.Cmd.History.list.push(input);
-			
+
+			//Adds input to Command History
+			CMDPROMPT.Cmd.History.list.push(input);
+
+			//splits string on first "space"
+			// i.e. [cmd] [string]
+			// converts cmd part to lowercase.
+			// string is not converted to lowercase
 			var cmd = $('.cmd').val().split(' ')[ 0 ].toLowerCase();
 			var string = input.substr(input.indexOf(" ") + 1);
-			
-			
+
+			//Look up [cmd] and take action
 			switch(cmd) {
 				case "connect":
+				//Attempts to connect to server
+				// not implemented
 					if (string == "true") {
-						Game.connect(true);
+						CMDPROMPT.connect(true);
 					} else {
-						Game.connect();
+						CMDPROMPT.connect();
 					}
 					break;
 				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
-					$('html').toggleClass('hacker');
+				//Secret Hacker colours enabled!
+					BasicFunctions.hacker(string);
 					break;
 				case "time": case "clock": case "date":
-					logger('<span class="error"><strong>' + cmd + '</strong>: ' + $.now() + '</span>');
+				//Displays unix timecode
+					BasicFunctions.echo(BasicFunctions.timestamp(string));
 					break;
 				case "print": case "echo":
-					logger('<strong class="muted">' + string + '</strong>');
+				//Echos [string]
+					//logger('<strong class="muted">' + string + '</strong>');
+					BasicFunctions.echo(string);
 					break;
-				case "about":
-					logger('<em>CLI version 1.0.<br />Built by <a href="http://twitter.com/ianisted" target="_blank">@ianisted</a>.<br />Released under <a href="https://github.com/ianisted/jquery-cli/blob/master/LICENSE" target="_blank">MIT license</a>. Type <strong>about-license</strong> to see the license.</strong></em>');
-					break;
-				case "about-license":
-					logger('<em>The MIT License (MIT)<br /><br />Copyright (c) 2016 Ian Isted<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: <br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</em>');
+				case "about": case "info":
+				//Prints about info
+					BasicFunctions.echo(BasicFunctions.about(string));
 					break;
 				case "clear": case "cls":
-					$('#terminal ul').html('');
+				//Clears terminal
+					BasicFunctions.cls(string);
 					break;
 				case "history":
+				//Prints history of commands
 					historylog = "";
-					$.each(Game.Cmd.History.list, function(i,val) {
+					$.each(CMDPROMPT.Cmd.History.list, function(i,val) {
 						historylog = historylog + i + ': ' + val + "<br />";
 					});
 					logger(historylog);
 					break;
+				case "help": case "/?": case "?":
+				//Basic help function
+					BasicFunctions.echo(BasicFunctions.help(string));
+					break;
 				default:
-					Game.Cmd.send(e);
+				//If command not recognized by CLI then send on.
+					CMDPROMPT.Cmd.send(e);
 					break;
 			}
-				
+
 			$('.cmd').val('');
-		
+
 		},
 		send:function(e) {
+			//Sends command to server to be processed
+			// not implemented yet
+			// all commands that arrive simply return "not valid command"
 			logger('<strong>' + e + '</strong> is not a valid command.');
 		},
 		History: {
+			//Creates and manages the Command History
 			list: [],
 			list_position:0,
 			previous:function() {
-				var list = Game.Cmd.History.list;
-				var pos = Game.Cmd.History.list_position;
-				
+				var list = CMDPROMPT.Cmd.History.list;
+				var pos = CMDPROMPT.Cmd.History.list_position;
+
 					if (pos == 0) {
 						pos = list.length - 1;
-						Game.Cmd.History.list_position = pos;
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						CMDPROMPT.Cmd.History.list_position = pos;
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 					} else {
 						pos = pos - 1;
-						Game.Cmd.History.list_position = pos;
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						CMDPROMPT.Cmd.History.list_position = pos;
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 					}
-				
+
 			},
 			next:function() {
-				var list = Game.Cmd.History.list;
-				var pos = Game.Cmd.History.list_position;
-				
+				var list = CMDPROMPT.Cmd.History.list;
+				var pos = CMDPROMPT.Cmd.History.list_position;
+
 					if (pos == 0) {
-						//Game.Cmd.History.list_position = list.length - 1;
-						//pos = Game.Cmd.History.list_position;
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						//CMDPROMPT.Cmd.History.list_position = list.length - 1;
+						//pos = CMDPROMPT.Cmd.History.list_position;
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 						pos = pos + 1;
-						Game.Cmd.History.list_position = pos;
+						CMDPROMPT.Cmd.History.list_position = pos;
 					} else if (pos < list.length) {
-						$('.cmd').val(Game.Cmd.History.list[pos]);
+						$('.cmd').val(CMDPROMPT.Cmd.History.list[pos]);
 						if (pos != list.length - 1) {
 							pos = pos + 1;
-							Game.Cmd.History.list_position = pos;
+							CMDPROMPT.Cmd.History.list_position = pos;
 						} else {
 							pos = 0;
-							Game.Cmd.History.list_position = pos;
+							CMDPROMPT.Cmd.History.list_position = pos;
 						}
 					}
-				
+
 			}
 		}
-		
-		
+
+
 	},
 	connect:function(params) {
-		// Connect to server
-			
+		//Connect to server
+		// not implemented, hence fails
 		logger('Could not connect. Application has not been setup to connect to a server.');
-		 
 	}
 }
