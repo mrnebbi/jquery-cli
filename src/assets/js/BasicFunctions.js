@@ -48,6 +48,13 @@ var BasicFunctions = {
     stdout = "clear done";
     return stdout;
   },
+  connect:function(stdin){
+    //Attempts to connect to server
+    // not implemented
+    var stdout = 'Could not connect. Application has not been setup to connect to a server.';
+    BasicFunctions.echo(stdout);
+    return stdout;
+  },
   echo:function(stdin){
     /*Echo's stdin to stdout
     Echo can be turned ON/OFF with Echo On & Echo Off

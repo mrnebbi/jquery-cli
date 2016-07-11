@@ -102,13 +102,7 @@ var CMDPROMPT = {
 			//Look up [cmd] and take action
 			switch(cmd) {
 				case "connect":
-				//Attempts to connect to server
-				// not implemented
-					if (string == "true") {
-						CMDPROMPT.connect(true);
-					} else {
-						CMDPROMPT.connect();
-					}
+					BasicFunctions.connect(string);
 					break;
 				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
 				//Secret Hacker colours enabled!
@@ -197,15 +191,7 @@ var CMDPROMPT = {
 							CMDPROMPT.Cmd.History.list_position = pos;
 						}
 					}
-
 			}
 		}
-
-
 	},
-	connect:function(params) {
-		//Connect to server
-		// not implemented, hence fails
-		logger('Could not connect. Application has not been setup to connect to a server.');
-	}
 }
