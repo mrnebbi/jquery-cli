@@ -51,6 +51,9 @@ var BasicFunctions = {
     */
     var stdout = "";
     switch(stdin.toLowerCase()) {
+      case "help":
+        stdout = '<br />HELP: ECHO []<br />' + '<br  />  ECHO [stdin] : Echo stdin to stdout and prints to terminal<br />  ECHO [ON/OFF] : Allows echo to print to terminal. std still goes to stdout<br />  ECHO : Displays current Echo state (ECHO ON/OFF)<br /> ';
+        break;
       case "off":
       //Turn Echo Off
         stdout = "ECHO OFF";
