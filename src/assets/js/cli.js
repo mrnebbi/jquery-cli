@@ -22,7 +22,7 @@ function logger(string,logID,status) {
 		}
 
 	} else {
-		$(terminal + ' ul').append('<li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
+		$(terminal + ' ul').append('<font color = lightblue><li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span></font> ' + string + '</li>');
 	};
 	$(terminal).scrollTop(900000);
 }
@@ -70,7 +70,10 @@ var CMDPROMPT = {
 	},
 	Cmd: {
 		input:function(e) {
-
+			/*Checks command inputs are not script
+			  and are not blank.
+				Then executes action based on input command.
+			*/
 			var input = e;
 
 			//Naughty script catcher
@@ -83,7 +86,7 @@ var CMDPROMPT = {
 
 			//Adds input to Command History
 			CMDPROMPT.Cmd.History.list.push(input);
-
+			logger(input);
 			//splits string on first "space"
 			// i.e. [cmd] [string]
 			// converts cmd part to lowercase.
@@ -113,7 +116,7 @@ var CMDPROMPT = {
 					break;
 				case "time": case "clock": case "date":
 				//Displays unix timecode
-					BasicFunctions.echo(BasicFunctions.timestamp(string));
+					BasicFunctions.timestamp(string);
 					break;
 				case "print": case "echo":
 				//Echos [string]
@@ -122,7 +125,7 @@ var CMDPROMPT = {
 					break;
 				case "about": case "info":
 				//Prints about info
-					BasicFunctions.echo(BasicFunctions.about(string));
+					BasicFunctions.about(string);
 					break;
 				case "clear": case "cls":
 				//Clears terminal
@@ -138,7 +141,7 @@ var CMDPROMPT = {
 					break;
 				case "help": case "/?": case "?":
 				//Basic help function
-					BasicFunctions.echo(BasicFunctions.help(string));
+					BasicFunctions.help(string);
 					break;
 				default:
 				//If command not recognized by CLI then send on.

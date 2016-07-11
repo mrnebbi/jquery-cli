@@ -35,6 +35,7 @@ var BasicFunctions = {
         stdout = "ERROR: This is not a valid command. Please see 'About Help'"
         break;
     }
+    BasicFunctions.echo(stdout);
     return stdout;
   },
   cls:function(stdin){
@@ -112,6 +113,7 @@ var BasicFunctions = {
       });
       stdout = '<br />Available commands:<br />' + helplist + '<br />';
     }
+    BasicFunctions.echo(stdout);
     return(stdout);
   },
   timestamp:function(stdin){
@@ -145,6 +147,7 @@ var BasicFunctions = {
         stdout = "ERROR: This is not a valid command. Please see 'Time Help'"
         break;
     }
+    BasicFunctions.echo(stdout);
     return stdout;
   }
 };
