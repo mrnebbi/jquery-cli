@@ -120,8 +120,14 @@ var BasicFunctions = {
     */
     //BROKEN FUNCTION
     var stdout = "";
-    stdout = "get a watch - mines broken!!";
-    //'<span class="error"><strong>' + cmd + '</strong>: ' + $.now() + '</span>';
+    if (stdin.toLowerCase() == "time") {
+      stdin = "";
+    }
+    switch(stdin.toLowerCase()) {
+      default:
+      stdout = "" + $.now();
+      break;
+    }
     return stdout;
   }
 };
