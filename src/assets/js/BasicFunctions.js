@@ -111,10 +111,27 @@ var BasicFunctions = {
     */
     //BROKEN FUNCTION
     var stdout = "";
+    var d = new Date();
     switch(stdin.toLowerCase()) {
+      case "stamp":
+      //returns unix time (milliseconds since midnight on 1st Jan 1970)
+        stdout = "" + d.getTime();
+        break;
+      case "date":
+      //returns uk date 23/07/2015
+        stdout = "" + d.toLocaleDateString("en-GB");
+        break;
+      case "time":
+      //returns uk time 20:01:53
+        stdout = "" + d.toLocaleTimeString("en-GB");
+        break;
+      case "full":
+      //returns uk date & time 23/07/2016, 20:04:08
+        stdout = "" + d.toLocaleString("en-GB");
+        break;
       default:
-      stdout = "" + $.now();
-      break;
+        stdout = "" + d.getTime();
+        break;
     }
     return stdout;
   }
