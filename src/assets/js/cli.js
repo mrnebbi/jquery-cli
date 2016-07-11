@@ -89,7 +89,12 @@ var CMDPROMPT = {
 			// converts cmd part to lowercase.
 			// string is not converted to lowercase
 			var cmd = $('.cmd').val().split(' ')[ 0 ].toLowerCase();
-			var string = input.substr(input.indexOf(" ") + 1);
+			var string = $('.cmd').val().toLowerCase();
+			if (string != cmd) {
+				string = input.substr(input.indexOf(" ") + 1);
+			} else {
+				string = "";
+			}
 
 			//Look up [cmd] and take action
 			switch(cmd) {

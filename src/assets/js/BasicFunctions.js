@@ -20,9 +20,6 @@ var BasicFunctions = {
     /*Send about information to stdout
     */
     var stdout = '';
-    if (stdin.toLowerCase() == "about") {
-      stdin = "";
-    }
     switch(stdin.toLowerCase()) {
       case "licence":
       //show licence agreement
@@ -50,9 +47,6 @@ var BasicFunctions = {
     If Echo is On then will also Echo Command to Terminal.
     */
     var stdout = "";
-    if (stdin.toLowerCase() == "echo") {
-      stdin = "";
-    }
     switch(stdin.toLowerCase()) {
       case "off":
       //Turn Echo Off
@@ -98,9 +92,6 @@ var BasicFunctions = {
     */
     var stdout = "";
     //special "help help" case;
-    if (stdin.toLowerCase() == "help") {
-      stdin = "";
-    }
     if (stdin.length > 0) {
       //give specific help on [stdin]
       stdout = helpDirectory[stdin];
@@ -120,9 +111,6 @@ var BasicFunctions = {
     */
     //BROKEN FUNCTION
     var stdout = "";
-    if (stdin.toLowerCase() == "time") {
-      stdin = "";
-    }
     switch(stdin.toLowerCase()) {
       default:
       stdout = "" + $.now();
