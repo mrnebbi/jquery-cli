@@ -74,6 +74,7 @@ var CMDPROMPT = {
 					case 9: //Tab
 					//Reserved for Tab-complete
 						event.preventDefault();
+						CMDPROMPT.Cmd.tabcomplete($('.cmd').val());
 						break;
 
 				}
@@ -116,6 +117,41 @@ var CMDPROMPT = {
 			//clear input
 			$('.cmd').val('');
 
+		},
+
+		tabcomplete:function(stdin) {
+				/*attempts to complete the user input if possible.
+					if multiple option exits they are all printed.
+				*/
+
+				//this code is a bit messy, but works.
+				var tablist = "";
+				var tabitem = ""
+				var len_stdin = stdin.length;
+	      $.each(CLI_Menu, function(key, value) {
+						if (key!='default' && key.substr(0,len_stdin) == stdin) {
+	          	if (tabitem == "") {
+								tabitem = key;
+								tablist = key;
+							}else{
+								tablist = tablist +'<br />'+ key;
+							}
+						}
+					});
+					if (tabitem !=""){
+						//if match was found then
+						if (tabitem == tablist) {
+							//if there is a unique option, populate user input
+							$('.cmd').val(tabitem);
+						}else{
+							//else list all option to user
+							//do not clear input
+							logger(tablist);
+						}
+					}else{
+						//if no matches found tell user
+						logger('No valid options found.');
+					}
 		},
 		send:function(e) {
 			//Sends command to server to be processed
