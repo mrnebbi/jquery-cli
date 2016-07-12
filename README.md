@@ -23,13 +23,12 @@ The easter egg
 ## Available commands
 
 - `time` (displays the current time as a unix timestamp)
-- `print` (will print the text that follows on screen)
-- `about` (displays information about this project)
-- `about-license` (displays the MIT license for this project)
-- `clear` (clears the screen)
+- `print`/`echo` (will print the text that follows on screen)
+- `about [license]` (displays information about this project [displays the MIT license for this project])
+- `clear`/`cls` (clears the screen)
 - `history` (displays command history. Can be navigated through with up and down arrows)
-- `h4x0r`/`1337` (this easter egg command, makees the terminal area look "hackery"... HACK THE PLANET)
-
+- `h4x0r`/`1337` (this easter egg command, makes the terminal area look "hackery"... HACK THE PLANET)
+- `help` (displays help, showing all avaliable commands)
 
 ## Future
 

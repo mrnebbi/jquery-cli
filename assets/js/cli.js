@@ -30,14 +30,25 @@ function logger(string,logID,status) {
 
 var connection = false; // Boolean to tell the system if a server connection has been made
 var echosetting = true; //echo nominaly set as true
-
+//create a global variable for the CLI_Menu
+var CLI_Menu = {
+  	'default': function() {
+			//initial menu only has default option on creation
+			BasicFunctions.echo('ERROR:Command not recognised');
+		}
+};
 
 var CMDPROMPT = {
 	init:function() {
 		// Initialise the command prompt window, and begin listening for key presses.
 
+		// Initialise the CLI with BasicFunctions
+		CLI_Menu = BasicFunctions.init_menu();
+
+		//Print Header message on cmd
 		logger('Application version: ' + version);
 
+		//on keystroke check for special keys
 		$('.cmd').keydown(function(event) {
 				switch(event.which) {
 					case 13: //Enter Key
@@ -63,6 +74,7 @@ var CMDPROMPT = {
 					case 9: //Tab
 					//Reserved for Tab-complete
 						event.preventDefault();
+						CMDPROMPT.Cmd.tabcomplete($('.cmd').val());
 						break;
 
 				}
@@ -92,59 +104,54 @@ var CMDPROMPT = {
 			// converts cmd part to lowercase.
 			// string is not converted to lowercase
 			var cmd = $('.cmd').val().split(' ')[ 0 ].toLowerCase();
-			var string = $('.cmd').val().toLowerCase();
-			if (string != cmd) {
-				string = input.substr(input.indexOf(" ") + 1);
+			var stdin = $('.cmd').val().toLowerCase();
+			if (stdin != cmd) {
+				stdin = input.substr(input.indexOf(" ") + 1);
 			} else {
-				string = "";
+				stdin = "";
 			}
 
-			//Look up [cmd] and take action
-			switch(cmd) {
-				case "connect":
-					BasicFunctions.connect(string);
-					break;
-				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
-				//Secret Hacker colours enabled!
-					BasicFunctions.hacker(string);
-					break;
-				case "time": case "clock": case "date":
-				//Displays unix timecode
-					BasicFunctions.timestamp(string);
-					break;
-				case "print": case "echo":
-				//Echos [string]
-					//logger('<strong class="muted">' + string + '</strong>');
-					BasicFunctions.echo(string);
-					break;
-				case "about": case "info":
-				//Prints about info
-					BasicFunctions.about(string);
-					break;
-				case "clear": case "cls":
-				//Clears terminal
-					BasicFunctions.cls(string);
-					break;
-				case "history":
-				//Prints history of commands
-					historylog = "";
-					$.each(CMDPROMPT.Cmd.History.list, function(i,val) {
-						historylog = historylog + i + ': ' + val + "<br />";
-					});
-					logger(historylog);
-					break;
-				case "help": case "/?": case "?":
-				//Basic help function
-					BasicFunctions.help(string);
-					break;
-				default:
-				//If command not recognized by CLI then send on.
-					CMDPROMPT.Cmd.send(e);
-					break;
-			}
+			//replaces switch statement to select menu option
+			(CLI_Menu[cmd]|| CLI_Menu['default'])(stdin);
 
+			//clear input
 			$('.cmd').val('');
 
+		},
+
+		tabcomplete:function(stdin) {
+				/*attempts to complete the user input if possible.
+					if multiple option exits they are all printed.
+				*/
+
+				//this code is a bit messy, but works.
+				var tablist = "";
+				var tabitem = ""
+				var len_stdin = stdin.length;
+	      $.each(CLI_Menu, function(key, value) {
+						if (key!='default' && key.substr(0,len_stdin) == stdin) {
+	          	if (tabitem == "") {
+								tabitem = key;
+								tablist = key;
+							}else{
+								tablist = tablist +'<br />'+ key;
+							}
+						}
+					});
+					if (tabitem !=""){
+						//if match was found then
+						if (tabitem == tablist) {
+							//if there is a unique option, populate user input
+							$('.cmd').val(tabitem);
+						}else{
+							//else list all option to user
+							//do not clear input
+							logger(tablist);
+						}
+					}else{
+						//if no matches found tell user
+						logger('No valid options found.');
+					}
 		},
 		send:function(e) {
 			//Sends command to server to be processed
