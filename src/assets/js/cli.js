@@ -111,7 +111,7 @@ var CMDPROMPT = {
 			}
 
 			//replaces switch statement to select menu option
-			(CLI_Menu[cmd]|| CLI_Menu['default'])(stdin,input);
+			(CLI_Menu[cmd]|| CLI_Menu['default'])(stdin);
 
 			//clear input
 			$('.cmd').val('');

@@ -3,24 +3,20 @@
 * This file was initially taken from AberQuest project of Ian Isted.
 * And then modified a bitty.
 */
-var helpDirectory = {};
-  helpDirectory['about'] = "<strong>about</strong>: Display information about this program.";
-  helpDirectory['connect'] = "<strong>connect</strong>: Attempt to connect to the Aberquest server.";
-  helpDirectory['clear'] = "<strong>clear</strong>: Clears the current log view.";
-  helpDirectory['connect'] = "<strong>connect</strong>: Attempt to connect to the Aberquest server.";
-  helpDirectory['history'] = "<strong>history</strong>: Display recent command history,  Use !number to run from history. Use up and down arrows to scroll through.";
-  helpDirectory['print'] = "<strong>print</strong>: Print a string to the log.";
-  helpDirectory['time'] = "<strong>time</strong>: Display the browsers current unix timestamp.";
 
 var BasicFunctions = {
 /*These are the built-in CLI function
   Please keep in alphabetical order for my OCD :-D
 */
   about:function(stdin){
-    /*Send about information to stdout
+    /*Send about information to stdout"<strong>print</strong>: Print a string to the log.";
     */
     var stdout = '';
     switch(stdin.toLowerCase()) {
+      case "helpdir":
+        stdout = "<strong>about</strong>: Display information about this program.";
+        return stdout;
+        break;
       case "help":
         stdout = '<br />HELP: ABOUT []<br />' + '<br  />  ABOUT : Displays basic about information<br />  ABOUT [LICENCE] : Displays licence specifc information<br />';
         break;
@@ -43,15 +39,39 @@ var BasicFunctions = {
     to be expanded with stdin dictating what to clear
     */
     //clears terminal
-    var stdout = "";
-    $('#terminal ul').html('');
-    stdout = "clear done";
+    var stdout = '';
+    switch (stdin){
+      case "helpdir":
+        stdout = "<strong>clear</strong>: Clears the current log view.";
+        return stdout;
+        break;
+      case "help":
+        stdout = '<br />HELP: CLEAR<br />' + '<br  />  CLEAR : Clears the current log view.<br />';
+        BasicFunctions.echo(stdout);
+        break;
+      default:
+        $('#terminal ul').html('');
+        stdout = "clear done";
+        break;
+    }
     return stdout;
   },
   connect:function(stdin){
     //Attempts to connect to server
     // not implemented
-    var stdout = 'Could not connect. Application has not been setup to connect to a server.';
+    var stdout = '';
+    switch (stdin){
+      case "helpdir":
+        stdout = "<strong>connect</strong>: Attempt to connect to a server.";
+        return stdout;
+        break;
+      case "help":
+        stdout = '<br />HELP: CONNECT<br />' + '<br  />  CONNECT : Function not implemented. No help avaliable.<br />';
+        break;
+      default:
+        var stdout = 'Could not connect. Application has not been setup to connect to a server.';
+        break;
+      }
     BasicFunctions.echo(stdout);
     return stdout;
   },
@@ -62,6 +82,10 @@ var BasicFunctions = {
     */
     var stdout = "";
     switch(stdin.toLowerCase()) {
+      case "helpdir":
+        stdout = "<strong>echo</strong>: Echo a string to the terminal.";
+        return stdout;
+        break;
       case "help":
         stdout = '<br />HELP: ECHO []<br />' + '<br  />  ECHO [stdin] : Echo stdin to stdout and prints to terminal<br />  ECHO [ON/OFF] : Allows echo to print to terminal. std still goes to stdout<br />  ECHO : Displays current Echo state (ECHO ON/OFF)<br /> ';
         break;
@@ -99,8 +123,20 @@ var BasicFunctions = {
     Hacker mode changes colour scheme
     */
     var stdout = "";
-    $('html').toggleClass('hacker');
-    stdout = "hackermode toggled";
+    switch(stdin) {
+      case "helpdir":
+        stdout = "<strong>hacker</strong>: Enables hacker mode.";
+        return stdout;
+        break;
+      case "help":
+        stdout = '<br />HELP: HACKER<br />' + '<br  />  HACKER : Enables hacker mode<br />';
+        BasicFunctions.echo(stdout);
+        break;
+      default:
+        $('html').toggleClass('hacker');
+        stdout = "hackermode toggled";
+        break;
+    }
     return stdout;
   },
   help:function(stdin){
@@ -109,18 +145,28 @@ var BasicFunctions = {
     */
     var stdout = "";
     //special "help help" case;
+    if (stdin == "helpdir"){
+      stdout = "<strong>help</strong>: help will help you if you need help.";
+      BasicFunctions.echo(stdout);
+      return(stdout);
+    }
     if (stdin.length > 0) {
       //give specific help on [stdin]
-      stdout = helpDirectory[stdin];
+      //uses help function instead each CLI_menu function
+      (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
     } else {
       //list all help
+      //uses helpdir function instead each CLI_menu function
       var helplist = "";
-      $.each(helpDirectory, function(key, value) {
-        helplist = helplist + value + '<br />';
+      $.each(CLI_Menu, function(key, value) {
+        if (key != "default") {
+          value = CLI_Menu[key]("helpdir");
+          helplist = helplist + value + '<br />';
+        }
       });
       stdout = '<br />Available commands:<br />' + helplist + '<br />';
+      BasicFunctions.echo(stdout);
     }
-    BasicFunctions.echo(stdout);
     return(stdout);
   },
   timestamp:function(stdin){
@@ -131,6 +177,10 @@ var BasicFunctions = {
     var stdout = "";
     var d = new Date();
     switch(stdin.toLowerCase()) {
+      case "helpdir":
+        stdout = "<strong>time</strong>: Displays the current time.";
+        return stdout;
+        break;
       case "help":
         stdout = '<br />HELP: TIME []<br />' + '<br  />  TIME : Displays current time in UK format<br />  TIME [STAMP] : Displays current unix time<br />  TIME [DATE] : Displays current date in UK format<br />  TIME [FULL] : Displays current time & date in UK format';
         break;
@@ -155,39 +205,39 @@ var BasicFunctions = {
         break;
     }
     BasicFunctions.echo(stdout);
-    return stdout;
+    return (stdout);
   },
-
   init_menu:function(stdin){
     /*Adds the BasicFunctions options to the
       command line menu.
     */
-    var stdout = {
+    var stdout = ""
+    stdout = {
         'default': function(stdin) {
-          BasicFunctions.echo('ERROR:Command not recognised');
+          return BasicFunctions.echo('ERROR:Command not recognised');
         },
         'about': function(stdin) {
-          BasicFunctions.about(stdin);
+          return BasicFunctions.about(stdin);
         },
         'clear': function(stdin) {
-          BasicFunctions.cls(stdin);
+          return BasicFunctions.cls(stdin);
         },
         'connect': function(stdin) {
-          BasicFunctions.connect(stdin);
+          return BasicFunctions.connect(stdin);
         },
         'echo': function(stdin) {
-          BasicFunctions.echo(stdin);
+          return BasicFunctions.echo(stdin);
         },
         'hacker': function(stdin) {
-          BasicFunctions.hacker(stdin);
+          return BasicFunctions.hacker(stdin);
         },
         'help': function(stdin) {
-          BasicFunctions.help(stdin);
+          return BasicFunctions.help(stdin);
         },
         'time': function(stdin) {
-          BasicFunctions.timestamp(stdin);
+          return BasicFunctions.timestamp(stdin);
         }
     };
-    return (stdout)
+    return (stdout);
   }
 };
