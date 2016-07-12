@@ -4,7 +4,7 @@ html, body {
 }
 
 body {
-	font-size:14px;
+	font-size:1em; /*changed to 1em from 14px*/
 	font-family:Arial;
 	color: #fff;
 }
