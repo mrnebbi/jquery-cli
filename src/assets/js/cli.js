@@ -30,14 +30,25 @@ function logger(string,logID,status) {
 
 var connection = false; // Boolean to tell the system if a server connection has been made
 var echosetting = true; //echo nominaly set as true
-
+//create a global variable for the CLI_Menu
+var CLI_Menu = {
+  	'default': function() {
+			//initial menu only has default option on creation
+			BasicFunctions.echo('ERROR:Command not recognised');
+		}
+};
 
 var CMDPROMPT = {
 	init:function() {
 		// Initialise the command prompt window, and begin listening for key presses.
 
+		// Initialise the CLI with BasicFunctions
+		CLI_Menu = BasicFunctions.init_menu();
+
+		//Print Header message on cmd
 		logger('Application version: ' + version);
 
+		//on keystroke check for special keys
 		$('.cmd').keydown(function(event) {
 				switch(event.which) {
 					case 13: //Enter Key
@@ -92,57 +103,17 @@ var CMDPROMPT = {
 			// converts cmd part to lowercase.
 			// string is not converted to lowercase
 			var cmd = $('.cmd').val().split(' ')[ 0 ].toLowerCase();
-			var string = $('.cmd').val().toLowerCase();
-			if (string != cmd) {
-				string = input.substr(input.indexOf(" ") + 1);
+			var stdin = $('.cmd').val().toLowerCase();
+			if (stdin != cmd) {
+				stdin = input.substr(input.indexOf(" ") + 1);
 			} else {
-				string = "";
+				stdin = "";
 			}
 
-			//Look up [cmd] and take action
-			switch(cmd) {
-				case "connect":
-					BasicFunctions.connect(string);
-					break;
-				case "h4x0r": case "hacktheplanet": case "hacker": case "l33t": case "1337":
-				//Secret Hacker colours enabled!
-					BasicFunctions.hacker(string);
-					break;
-				case "time": case "clock": case "date":
-				//Displays unix timecode
-					BasicFunctions.timestamp(string);
-					break;
-				case "print": case "echo":
-				//Echos [string]
-					//logger('<strong class="muted">' + string + '</strong>');
-					BasicFunctions.echo(string);
-					break;
-				case "about": case "info":
-				//Prints about info
-					BasicFunctions.about(string);
-					break;
-				case "clear": case "cls":
-				//Clears terminal
-					BasicFunctions.cls(string);
-					break;
-				case "history":
-				//Prints history of commands
-					historylog = "";
-					$.each(CMDPROMPT.Cmd.History.list, function(i,val) {
-						historylog = historylog + i + ': ' + val + "<br />";
-					});
-					logger(historylog);
-					break;
-				case "help": case "/?": case "?":
-				//Basic help function
-					BasicFunctions.help(string);
-					break;
-				default:
-				//If command not recognized by CLI then send on.
-					CMDPROMPT.Cmd.send(e);
-					break;
-			}
+			//replaces switch statement to select menu option
+			(CLI_Menu[cmd]|| CLI_Menu['default'])(stdin,input);
 
+			//clear input
 			$('.cmd').val('');
 
 		},

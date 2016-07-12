@@ -156,5 +156,38 @@ var BasicFunctions = {
     }
     BasicFunctions.echo(stdout);
     return stdout;
+  },
+
+  init_menu:function(stdin){
+    /*Adds the BasicFunctions options to the
+      command line menu.
+    */
+    var stdout = {
+        'default': function(stdin) {
+          BasicFunctions.echo('ERROR:Command not recognised');
+        },
+        'about': function(stdin) {
+          BasicFunctions.about(stdin);
+        },
+        'clear': function(stdin) {
+          BasicFunctions.cls(stdin);
+        },
+        'connect': function(stdin) {
+          BasicFunctions.connect(stdin);
+        },
+        'echo': function(stdin) {
+          BasicFunctions.echo(stdin);
+        },
+        'hacker': function(stdin) {
+          BasicFunctions.hacker(stdin);
+        },
+        'help': function(stdin) {
+          BasicFunctions.help(stdin);
+        },
+        'time': function(stdin) {
+          BasicFunctions.timestamp(stdin);
+        }
+    };
+    return (stdout)
   }
 };
