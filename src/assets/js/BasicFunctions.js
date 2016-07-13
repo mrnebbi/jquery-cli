@@ -169,41 +169,58 @@ var BasicFunctions = {
     return(stdout);
   },
   timestamp:function(stdin){
-    /*gives the current unix timecode
-      could be expanded later to include [timestamp date|time|month...]
+    /*gives the current time in various forms
     */
-    //BROKEN FUNCTION
+    //required varaible
     var stdout = "";
+    var function_menu = "";
+    //function variables
     var d = new Date();
-    switch(stdin.toLowerCase()) {
-      case "helpdir":
-        stdout = "<strong>time</strong>: Displays the current time.";
-        return stdout;
-        break;
-      case "help":
-        stdout = '<br />HELP: TIME []<br />' + '<br  />  TIME : Displays current time in UK format<br />  TIME [STAMP] : Displays current unix time<br />  TIME [DATE] : Displays current date in UK format<br />  TIME [FULL] : Displays current time & date in UK format';
-        break;
-      case "stamp":
-      //returns unix time (milliseconds since midnight on 1st Jan 1970)
-        stdout = "" + d.getTime();
-        break;
-      case "date":
-      //returns uk date 23/07/2015
-        stdout = "" + d.toLocaleDateString("en-GB");
-        break;
-      case "":
-      //returns uk time 20:01:53
-        stdout = "" + d.toLocaleTimeString("en-GB");
-        break;
-      case "full":
-      //returns uk date & time 23/07/2016, 20:04:08
-        stdout = "" + d.toLocaleString("en-GB");
-        break;
-      default:
+    //menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
         stdout = "ERROR: This is not a valid command. Please see 'Time Help'"
-        break;
-    }
+      },
+      'helpdir': function(stdin) { //required option
+        //one line help statement
+        //must return without echo
+        stdout = "<strong>time</strong>: Displays the current time.";
+        return (stdout);
+      },
+      'help': function(stdin) { //required option
+        //big help statement
+        stdout = '<br />HELP: TIME []<br />' + '<br  />  TIME : Displays current time in UK format<br />  TIME [STAMP] : Displays current unix time<br />  TIME [DATE] : Displays current date in UK format<br />  TIME [FULL] : Displays current time & date in UK format';
+      },
+      'function_menu': function(stdin) { //required option
+        //big help statement
+        //must return without echo
+        stdout = function_menu;
+        return (stdout);
+      },
+      /* function specific options */
+      'date': function(stdin) {
+        //returns uk date 23/07/2015
+        stdout = "" + d.toLocaleDateString("en-GB");
+      },
+      'full': function(stdin) {
+        //returns uk date & time 23/07/2016, 20:04:08
+        stdout = "" + d.toLocaleString("en-GB");
+      },
+      'stamp': function(stdin) {
+        //returns unix time (milliseconds since midnight on 1st Jan 1970)
+        stdout = "" + d.getTime();
+      },
+      '': function(stdin) {
+        //returns unix time (milliseconds since midnight on 1st Jan 1970)
+        stdout = "" + d.toLocaleTimeString("en-GB");
+      }
+    };
+    //required menu executer
+    (function_menu[stdin]|| function_menu['default'])(stdin);
+    //normally required echo of stdout
     BasicFunctions.echo(stdout);
+    //required return of stdout
     return (stdout);
   },
   init_menu:function(stdin){

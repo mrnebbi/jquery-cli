@@ -129,7 +129,7 @@ var CMDPROMPT = {
 				var tabitem = ""
 				var len_stdin = stdin.length;
 	      $.each(CLI_Menu, function(key, value) {
-						if (key!='default' && key.substr(0,len_stdin) == stdin) {
+						if (key!='default' && key.substr(0,len_stdin) == stdin.toLowerCase()) {
 	          	if (tabitem == "") {
 								tabitem = key;
 								tablist = key;
