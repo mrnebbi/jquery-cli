@@ -192,12 +192,6 @@ var BasicFunctions = {
         //big help statement
         stdout = '<br />HELP: TIME []<br />' + '<br  />  TIME : Displays current time in UK format<br />  TIME [STAMP] : Displays current unix time<br />  TIME [DATE] : Displays current date in UK format<br />  TIME [FULL] : Displays current time & date in UK format';
       },
-      'function_menu': function(stdin) { //required option
-        //big help statement
-        //must return without echo
-        stdout = function_menu;
-        return (stdout);
-      },
       /* function specific options */
       'date': function(stdin) {
         //returns uk date 23/07/2015
@@ -216,10 +210,14 @@ var BasicFunctions = {
         stdout = "" + d.toLocaleTimeString("en-GB");
       }
     };
+
     //required menu executer
+    if (stdin == 'function_menu'){return (function_menu);}
     (function_menu[stdin]|| function_menu['default'])(stdin);
+
     //normally required echo of stdout
     BasicFunctions.echo(stdout);
+
     //required return of stdout
     return (stdout);
   },

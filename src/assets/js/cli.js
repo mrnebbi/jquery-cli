@@ -118,17 +118,37 @@ var CMDPROMPT = {
 			$('.cmd').val('');
 
 		},
-
 		tabcomplete:function(stdin) {
+			var stdout = "";
+			var tempout = "";
+			var stdinlist = (stdin).split(' ');
+			//logger(stdin_list[0]);
+			var menuselected = CLI_Menu;
+			for (i=0; i < stdinlist.length; i++) {
+				tempout = CMDPROMPT.Cmd.tabsub(stdinlist[i],menuselected);
+				if (tempout.substr(0,11) == '#TabOptions'){
+					logger(tempout);
+					//break;
+				}else{
+					stdout = stdout + tempout + ' ';
+					$('.cmd').val(stdout.substr(0,(stdout.length-1)));
+					echosetting=false;
+					menuselected = (menuselected[tempout]|| menuselected['default'])('function_menu');
+					echosetting=true;
+				}
+			}
+		},
+		tabsub:function(stdin,menuselected) {
 				/*attempts to complete the user input if possible.
 					if multiple option exits they are all printed.
 				*/
 
 				//this code is a bit messy, but works.
 				var tablist = "";
-				var tabitem = ""
+				var tabitem = "";
+				var stdout = "";
 				var len_stdin = stdin.length;
-	      $.each(CLI_Menu, function(key, value) {
+	      $.each(menuselected, function(key, value) {
 						if (key!='default' && key.substr(0,len_stdin) == stdin.toLowerCase()) {
 	          	if (tabitem == "") {
 								tabitem = key;
@@ -138,20 +158,16 @@ var CMDPROMPT = {
 							}
 						}
 					});
-					if (tabitem !=""){
-						//if match was found then
-						if (tabitem == tablist) {
-							//if there is a unique option, populate user input
-							$('.cmd').val(tabitem);
-						}else{
-							//else list all option to user
-							//do not clear input
-							logger(tablist);
-						}
+					if (tabitem == tablist) {
+						//if there is a unique option, populate user input
+						stdout = tabitem;
+						//$('.cmd').val(tabitem);
 					}else{
-						//if no matches found tell user
-						logger('No valid options found.');
+						//else list all option to user
+						//do not clear input
+						stdout = '#TabOptions:<br />' + tablist;
 					}
+					return (stdout);
 		},
 		send:function(e) {
 			//Sends command to server to be processed
