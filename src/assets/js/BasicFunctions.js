@@ -147,7 +147,6 @@ var BasicFunctions = {
     //special "help help" case;
     if (stdin == "helpdir"){
       stdout = "<strong>help</strong>: help will help you if you need help.";
-      BasicFunctions.echo(stdout);
       return(stdout);
     }
     if (stdin.length > 0) {
