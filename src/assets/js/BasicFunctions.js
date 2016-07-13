@@ -171,22 +171,19 @@ var BasicFunctions = {
   timestamp:function(stdin){
     /*gives the current time in various forms
     */
-    //required varaible
+
+    //required variable
     var stdout = "";
     var function_menu = "";
+
     //function variables
     var d = new Date();
-    //menu structure
+
+    //function_menu structure
     function_menu = {
       'default': function(stdin) { //required option
         //default option
         stdout = "ERROR: This is not a valid command. Please see 'Time Help'"
-      },
-      'helpdir': function(stdin) { //required option
-        //one line help statement
-        //must return without echo
-        stdout = "<strong>time</strong>: Displays the current time.";
-        return (stdout);
       },
       'help': function(stdin) { //required option
         //big help statement
@@ -211,9 +208,23 @@ var BasicFunctions = {
       }
     };
 
-    //required menu executer
-    if (stdin == 'function_menu'){return (function_menu);}
-    (function_menu[stdin]|| function_menu['default'])(stdin);
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>time</strong>: Displays the current time.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
+    }
 
     //normally required echo of stdout
     BasicFunctions.echo(stdout);
