@@ -116,9 +116,56 @@ var BasicFunctions = {
     return (stdout);
   },
   connect:function(stdin){
-    //Attempts to connect to server
-    // not implemented
-    var stdout = '';
+    /*Attempts to connect to server
+      [NOT YET IMPLEMENTED]
+    */
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = 'Could not connect to: ' + stdin + '.<br /> Application has not been setup to connect to a server.';
+      },
+      'help': function(stdin) { //required option
+        //big help statement
+        stdout = '<br />HELP: CONNECT<br />' + '<br  />  CONNECT : Function not implemented. No help avaliable.<br />';
+      },
+      '': function(stdin) {
+        //prompt for server address
+        stdout = 'Please give a server address <br /> e.g: Connect MyEpicServer';
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>connect</strong>: Attempt to connect to a server.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
+    }
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
+    //!!!!!!!!!!!!!!!!!!!!!!!!!11
     switch (stdin){
       case "helpdir":
         stdout = "<strong>connect</strong>: Attempt to connect to a server.";
