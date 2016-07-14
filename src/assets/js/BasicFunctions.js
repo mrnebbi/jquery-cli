@@ -15,7 +15,7 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+    stdin = stdin.toLowerCase();
     //function variables
 
     //function_menu structure
@@ -71,7 +71,7 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+    stdin = stdin.toLowerCase();
     //function variables
 
     //function_menu structure
@@ -139,42 +139,69 @@ var BasicFunctions = {
     Echo can be turned ON/OFF with Echo On & Echo Off
     If Echo is On then will also Echo Command to Terminal.
     */
+
+    //required variable
     var stdout = "";
-    switch(stdin.toLowerCase()) {
-      case "helpdir":
-        stdout = "<strong>echo</strong>: Echo a string to the terminal.";
-        return stdout;
-        break;
-      case "help":
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = stdin;
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: ECHO []<br />' + '<br  />  ECHO [stdin] : Echo stdin to stdout and prints to terminal<br />  ECHO [ON/OFF] : Allows echo to print to terminal. std still goes to stdout<br />  ECHO : Displays current Echo state (ECHO ON/OFF)<br /> ';
-        break;
-      case "off":
-      //Turn Echo Off
+      },
+      /* function specific options */
+      'off': function(stdin) {
+        //Turn Echo Off
         stdout = "ECHO OFF";
         echosetting = false;
-        break;
-      case "on":
-      //Turn Echo On
+      },
+      'on': function(stdin) {
+        //Turn Echo On
         stdout = "ECHO ON";
         echosetting = true;
-        break;
-      case "":
-      //Show Echo Setting
+      },
+      '': function(stdin) {
+        //Show Echo Setting
         if (echosetting == false) {
           stdout = "ECHO OFF";
         }else {
           stdout = "ECHO ON";
         }
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>echo</strong>: Echo a string to the terminal.";
+        return (stdout);
         break;
       default:
-      //Otherwise Echo reponse if Echo is On.
-        stdout = stdin;
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
+
+    //normally required echo of stdout
     if (echosetting == true) {
       logger(stdout);
     }
-    return stdout;
+
+    //required return of stdout
+    return (stdout);
   },
   hacker:function(stdin){
     /*Easter Egg
@@ -206,9 +233,8 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+    stdin = stdin.toLowerCase();
     //function variables
-    var d = new Date();
 
     //function_menu structure
     function_menu = {
@@ -216,6 +242,7 @@ var BasicFunctions = {
         //give specific help on [stdin]
         //uses help function instead each CLI_menu function
         (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
+        return (stdout);
       },
       'help': function(stdin) { //required option
         //big help statement
@@ -265,7 +292,7 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+    stdin = stdin.toLowerCase();
     //function variables
     var d = new Date();
 
@@ -331,7 +358,7 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+    stdin = stdin.toLowerCase();
     //function variables
 
     //function_menu structure
