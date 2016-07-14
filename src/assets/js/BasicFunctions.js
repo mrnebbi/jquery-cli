@@ -208,22 +208,53 @@ var BasicFunctions = {
     Enables/Disabled Hackermode
     Hacker mode changes colour scheme
     */
+
+    //required variable
     var stdout = "";
-    switch(stdin) {
-      case "helpdir":
-        stdout = "<strong>hacker</strong>: Enables hacker mode.";
-        return stdout;
-        break;
-      case "help":
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: This is not a valid command. Please see 'Clear Help'";
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: HACKER<br />' + '<br  />  HACKER : Enables hacker mode<br />';
-        BasicFunctions.echo(stdout);
-        break;
-      default:
+      },
+      '': function(stdin) {
+        //toggles hacker mode
         $('html').toggleClass('hacker');
         stdout = "hackermode toggled";
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>hacker</strong>: Enables hacker mode.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
-    return stdout;
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
   },
   help:function(stdin){
     /*help lists all avaliable commands
