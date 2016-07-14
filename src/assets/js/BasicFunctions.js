@@ -327,33 +327,57 @@ var BasicFunctions = {
     /*Adds the BasicFunctions options to the
       command line menu.
     */
-    var stdout = ""
-    stdout = {
-        'default': function(stdin) {
-          return BasicFunctions.echo('ERROR:Command not recognised');
-        },
-        'about': function(stdin) {
-          return BasicFunctions.about(stdin);
-        },
-        'clear': function(stdin) {
-          return BasicFunctions.cls(stdin);
-        },
-        'connect': function(stdin) {
-          return BasicFunctions.connect(stdin);
-        },
-        'echo': function(stdin) {
-          return BasicFunctions.echo(stdin);
-        },
-        'hacker': function(stdin) {
-          return BasicFunctions.hacker(stdin);
-        },
-        'help': function(stdin) {
-          return BasicFunctions.help(stdin);
-        },
-        'time': function(stdin) {
-          return BasicFunctions.timestamp(stdin);
-        }
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        return BasicFunctions.echo('ERROR:Command not recognised');
+      },
+      /* function specific options */
+      'about': function(stdin) {
+        return BasicFunctions.about(stdin);
+      },
+      'clear': function(stdin) {
+        return BasicFunctions.cls(stdin);
+      },
+      'connect': function(stdin) {
+        return BasicFunctions.connect(stdin);
+      },
+      'echo': function(stdin) {
+        return BasicFunctions.echo(stdin);
+      },
+      'hacker': function(stdin) {
+        return BasicFunctions.hacker(stdin);
+      },
+      'help': function(stdin) {
+        return BasicFunctions.help(stdin);
+      },
+      'time': function(stdin) {
+        return BasicFunctions.timestamp(stdin);
+      }
     };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
+    }
+
+    //required return of stdout
     return (stdout);
   }
 };

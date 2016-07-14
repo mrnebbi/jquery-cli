@@ -43,7 +43,7 @@ var CMDPROMPT = {
 		// Initialise the command prompt window, and begin listening for key presses.
 
 		// Initialise the CLI with BasicFunctions
-		CLI_Menu = BasicFunctions.init_menu();
+		CLI_Menu = BasicFunctions.init_menu('function_menu');
 
 		//Print Header message on cmd
 		logger('Application version: ' + version);
