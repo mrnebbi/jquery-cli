@@ -202,30 +202,61 @@ var BasicFunctions = {
     /*help lists all avaliable commands
     help [command] gives specifics about a command
     */
+
+    //required variable
     var stdout = "";
-    //special "help help" case;
-    if (stdin == "helpdir"){
-      stdout = "<strong>help</strong>: help will help you if you need help.";
-      return(stdout);
+    var function_menu = "";
+
+    //function variables
+    var d = new Date();
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //give specific help on [stdin]
+        //uses help function instead each CLI_menu function
+        (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
+      },
+      'help': function(stdin) { //required option
+        //big help statement
+        stdout = '<br />HELP: HELP []<br />' + '<br  />  HELP : List all avalible commands with short help<br />  HELP [COMMAND] : Displays larger help for a give command.';
+      },
+      '': function(stdin) {
+        //list all help
+        //uses helpdir function instead each CLI_menu function
+        $.each(CLI_Menu, function(key, value) {
+          if (key != "default") {
+            value = CLI_Menu[key]("helpdir");
+            stdout = stdout + value + '<br />';
+          }
+        });
+        stdout = '<br />Available commands:<br />' + stdout + '<br />';
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = CLI_Menu; //help function differs here from normal functions.
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>help</strong>: help will help you if you need help.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
     }
-    if (stdin.length > 0) {
-      //give specific help on [stdin]
-      //uses help function instead each CLI_menu function
-      (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
-    } else {
-      //list all help
-      //uses helpdir function instead each CLI_menu function
-      var helplist = "";
-      $.each(CLI_Menu, function(key, value) {
-        if (key != "default") {
-          value = CLI_Menu[key]("helpdir");
-          helplist = helplist + value + '<br />';
-        }
-      });
-      stdout = '<br />Available commands:<br />' + helplist + '<br />';
-      BasicFunctions.echo(stdout);
-    }
-    return(stdout);
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
   },
   timestamp:function(stdin){
     /*gives the current time in various forms
