@@ -17,7 +17,6 @@ var BasicFunctions = {
     var function_menu = "";
 
     //function variables
-    var d = new Date();
 
     //function_menu structure
     function_menu = {
@@ -31,11 +30,11 @@ var BasicFunctions = {
       },
       /* function specific options */
       'licence': function(stdin) {
-        //returns uk date 23/07/2015
+        //display licence information
         stdout = '<em>The MIT License (MIT)<br /><br />Copyright (c) 2016 Ian Isted<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: <br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</em>';
       },
       '': function(stdin) {
-        //returns unix time (milliseconds since midnight on 1st Jan 1970)
+        //display general about information
         stdout = '<em>CLI version 1.0.<br />Built by <a href="http://twitter.com/ianisted" target="_blank">@ianisted</a>.<br />Released under <a href="https://github.com/ianisted/jquery-cli/blob/master/LICENSE" target="_blank">MIT license</a>. Type <strong>about license</strong> to see the license.</strong></em>';
       }
     };
@@ -68,23 +67,53 @@ var BasicFunctions = {
     /*Clears terminal window
     to be expanded with stdin dictating what to clear
     */
-    //clears terminal
-    var stdout = '';
-    switch (stdin){
-      case "helpdir":
-        stdout = "<strong>clear</strong>: Clears the current log view.";
-        return stdout;
-        break;
-      case "help":
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: This is not a valid command. Please see 'Clear Help'";
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: CLEAR<br />' + '<br  />  CLEAR : Clears the current log view.<br />';
-        BasicFunctions.echo(stdout);
+      },
+      '': function(stdin) {
+        //clears terminal window
+        $('#terminal ul').html('');
+        stdout = 'Application version: ' + version;
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>clear</strong>: Clears the current log view.";
+        return (stdout);
         break;
       default:
-        $('#terminal ul').html('');
-        stdout = "clear done";
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
-    return stdout;
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
   },
   connect:function(stdin){
     //Attempts to connect to server
