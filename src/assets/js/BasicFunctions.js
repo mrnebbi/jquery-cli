@@ -363,6 +363,57 @@ var BasicFunctions = {
     //required return of stdout
     return (stdout);
   },
+  sendtoserver:function(stdin){
+    /*Sends stdin to the "server" (if connected).";
+    */
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: Command not understood " + stdin;
+      },
+      'help': function(stdin) { //required option
+        //big help statement
+        stdout = '<br />HELP: SEND []<br />' + '<br  />  SEND [STRING] : Sends the string to the server anch echos response<br />';
+      },
+      /* function specific options */
+      '': function(stdin) {
+        //display general about information
+        stdout = 'ERROR: No string detected' + stdin;
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>send</strong>: Sends the string to the server anch echos response.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
+    }
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
+  },
   timestamp:function(stdin){
     /*gives the current time in various forms
     */
@@ -441,9 +492,9 @@ var BasicFunctions = {
 
     //function_menu structure
     function_menu = {
-      'default': function(stdin) { //required option
+      'default': function(stdin, cmd) { //required option
         //default option
-        return BasicFunctions.echo('ERROR:Command not recognised');
+        return BasicFunctions.sendtoserver(cmd + ' ' + stdin);
       },
       /* function specific options */
       'about': function(stdin) {
@@ -463,6 +514,9 @@ var BasicFunctions = {
       },
       'help': function(stdin) {
         return BasicFunctions.help(stdin);
+      },
+      'send': function(stdin) {
+        return BasicFunctions.sendtoserver(stdin);
       },
       'time': function(stdin) {
         return BasicFunctions.timestamp(stdin);

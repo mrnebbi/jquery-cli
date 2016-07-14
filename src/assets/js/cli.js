@@ -112,7 +112,7 @@ var CMDPROMPT = {
 			}
 
 			//replaces switch statement to select menu option
-			(CLI_Menu[cmd]|| CLI_Menu['default'])(stdin);
+			(CLI_Menu[cmd]|| CLI_Menu['default'])(stdin, cmd);
 
 			//clear input
 			$('.cmd').val('');
@@ -168,12 +168,6 @@ var CMDPROMPT = {
 						stdout = '#TabOptions:<br />' + tablist;
 					}
 					return (stdout);
-		},
-		send:function(e) {
-			//Sends command to server to be processed
-			// not implemented yet
-			// all commands that arrive simply return "not valid command"
-			logger('<strong>' + e + '</strong> is not a valid command.');
 		},
 		History: {
 			//Creates and manages the Command History
