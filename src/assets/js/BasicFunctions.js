@@ -11,28 +11,58 @@ var BasicFunctions = {
   about:function(stdin){
     /*Send about information to stdout"<strong>print</strong>: Print a string to the log.";
     */
-    var stdout = '';
-    switch(stdin.toLowerCase()) {
-      case "helpdir":
-        stdout = "<strong>about</strong>: Display information about this program.";
-        return stdout;
-        break;
-      case "help":
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+
+    //function variables
+    var d = new Date();
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: This is not a valid command. Please see 'About Help'"
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: ABOUT []<br />' + '<br  />  ABOUT : Displays basic about information<br />  ABOUT [LICENCE] : Displays licence specifc information<br />';
-        break;
-      case "licence":
-      //show licence agreement
+      },
+      /* function specific options */
+      'licence': function(stdin) {
+        //returns uk date 23/07/2015
         stdout = '<em>The MIT License (MIT)<br /><br />Copyright (c) 2016 Ian Isted<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: <br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</em>';
-        break;
-      case "":
+      },
+      '': function(stdin) {
+        //returns unix time (milliseconds since midnight on 1st Jan 1970)
         stdout = '<em>CLI version 1.0.<br />Built by <a href="http://twitter.com/ianisted" target="_blank">@ianisted</a>.<br />Released under <a href="https://github.com/ianisted/jquery-cli/blob/master/LICENSE" target="_blank">MIT license</a>. Type <strong>about license</strong> to see the license.</strong></em>';
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>about</strong>: Display information about this program.";
+        return (stdout);
         break;
       default:
-        stdout = "ERROR: This is not a valid command. Please see 'About Help'"
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
+
+    //normally required echo of stdout
     BasicFunctions.echo(stdout);
-    return stdout;
+
+    //required return of stdout
+    return (stdout);
   },
   cls:function(stdin){
     /*Clears terminal window
@@ -231,6 +261,7 @@ var BasicFunctions = {
 
     //required return of stdout
     return (stdout);
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   },
   init_menu:function(stdin){
     /*Adds the BasicFunctions options to the
