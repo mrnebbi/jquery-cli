@@ -11,55 +11,161 @@ var BasicFunctions = {
   about:function(stdin){
     /*Send about information to stdout"<strong>print</strong>: Print a string to the log.";
     */
-    var stdout = '';
-    switch(stdin.toLowerCase()) {
-      case "helpdir":
-        stdout = "<strong>about</strong>: Display information about this program.";
-        return stdout;
-        break;
-      case "help":
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: This is not a valid command. Please see 'About Help'"
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: ABOUT []<br />' + '<br  />  ABOUT : Displays basic about information<br />  ABOUT [LICENCE] : Displays licence specifc information<br />';
-        break;
-      case "licence":
-      //show licence agreement
+      },
+      /* function specific options */
+      'licence': function(stdin) {
+        //display licence information
         stdout = '<em>The MIT License (MIT)<br /><br />Copyright (c) 2016 Ian Isted<br />Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: <br />The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</em>';
-        break;
-      case "":
+      },
+      '': function(stdin) {
+        //display general about information
         stdout = '<em>CLI version 1.0.<br />Built by <a href="http://twitter.com/ianisted" target="_blank">@ianisted</a>.<br />Released under <a href="https://github.com/ianisted/jquery-cli/blob/master/LICENSE" target="_blank">MIT license</a>. Type <strong>about license</strong> to see the license.</strong></em>';
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>about</strong>: Display information about this program.";
+        return (stdout);
         break;
       default:
-        stdout = "ERROR: This is not a valid command. Please see 'About Help'"
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
+
+    //normally required echo of stdout
     BasicFunctions.echo(stdout);
-    return stdout;
+
+    //required return of stdout
+    return (stdout);
   },
   cls:function(stdin){
     /*Clears terminal window
     to be expanded with stdin dictating what to clear
     */
-    //clears terminal
-    var stdout = '';
-    switch (stdin){
-      case "helpdir":
-        stdout = "<strong>clear</strong>: Clears the current log view.";
-        return stdout;
-        break;
-      case "help":
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: This is not a valid command. Please see 'Clear Help'";
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: CLEAR<br />' + '<br  />  CLEAR : Clears the current log view.<br />';
-        BasicFunctions.echo(stdout);
+      },
+      '': function(stdin) {
+        //clears terminal window
+        $('#terminal ul').html('');
+        stdout = 'Application version: ' + version;
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>clear</strong>: Clears the current log view.";
+        return (stdout);
         break;
       default:
-        $('#terminal ul').html('');
-        stdout = "clear done";
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
-    return stdout;
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
   },
   connect:function(stdin){
-    //Attempts to connect to server
-    // not implemented
-    var stdout = '';
+    /*Attempts to connect to server
+      [NOT YET IMPLEMENTED]
+    */
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = 'Could not connect to: ' + stdin + '.<br /> Application has not been setup to connect to a server.';
+      },
+      'help': function(stdin) { //required option
+        //big help statement
+        stdout = '<br />HELP: CONNECT<br />' + '<br  />  CONNECT : Function not implemented. No help avaliable.<br />';
+      },
+      '': function(stdin) {
+        //prompt for server address
+        stdout = 'Please give a server address <br /> e.g: Connect MyEpicServer';
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>connect</strong>: Attempt to connect to a server.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
+    }
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
+    //!!!!!!!!!!!!!!!!!!!!!!!!!11
     switch (stdin){
       case "helpdir":
         stdout = "<strong>connect</strong>: Attempt to connect to a server.";
@@ -80,93 +186,182 @@ var BasicFunctions = {
     Echo can be turned ON/OFF with Echo On & Echo Off
     If Echo is On then will also Echo Command to Terminal.
     */
+
+    //required variable
     var stdout = "";
-    switch(stdin.toLowerCase()) {
-      case "helpdir":
-        stdout = "<strong>echo</strong>: Echo a string to the terminal.";
-        return stdout;
-        break;
-      case "help":
+    var function_menu = "";
+    //stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = stdin;
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: ECHO []<br />' + '<br  />  ECHO [stdin] : Echo stdin to stdout and prints to terminal<br />  ECHO [ON/OFF] : Allows echo to print to terminal. std still goes to stdout<br />  ECHO : Displays current Echo state (ECHO ON/OFF)<br /> ';
-        break;
-      case "off":
-      //Turn Echo Off
+      },
+      /* function specific options */
+      'off': function(stdin) {
+        //Turn Echo Off
         stdout = "ECHO OFF";
         echosetting = false;
-        break;
-      case "on":
-      //Turn Echo On
+      },
+      'on': function(stdin) {
+        //Turn Echo On
         stdout = "ECHO ON";
         echosetting = true;
-        break;
-      case "":
-      //Show Echo Setting
+      },
+      '': function(stdin) {
+        //Show Echo Setting
         if (echosetting == false) {
           stdout = "ECHO OFF";
         }else {
           stdout = "ECHO ON";
         }
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>echo</strong>: Echo a string to the terminal.";
+        return (stdout);
         break;
       default:
-      //Otherwise Echo reponse if Echo is On.
-        stdout = stdin;
+        //default is to look up function_menu
+        (function_menu[stdin.toLowerCase()]|| function_menu['default'])(stdin);
         break;
     }
+
+    //normally required echo of stdout
     if (echosetting == true) {
       logger(stdout);
     }
-    return stdout;
+
+    //required return of stdout
+    return (stdout);
   },
   hacker:function(stdin){
     /*Easter Egg
     Enables/Disabled Hackermode
     Hacker mode changes colour scheme
     */
+
+    //required variable
     var stdout = "";
-    switch(stdin) {
-      case "helpdir":
-        stdout = "<strong>hacker</strong>: Enables hacker mode.";
-        return stdout;
-        break;
-      case "help":
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        stdout = "ERROR: This is not a valid command. Please see 'Clear Help'";
+      },
+      'help': function(stdin) { //required option
+        //big help statement
         stdout = '<br />HELP: HACKER<br />' + '<br  />  HACKER : Enables hacker mode<br />';
-        BasicFunctions.echo(stdout);
-        break;
-      default:
+      },
+      '': function(stdin) {
+        //toggles hacker mode
         $('html').toggleClass('hacker');
         stdout = "hackermode toggled";
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>hacker</strong>: Enables hacker mode.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
         break;
     }
-    return stdout;
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
   },
   help:function(stdin){
     /*help lists all avaliable commands
     help [command] gives specifics about a command
     */
+
+    //required variable
     var stdout = "";
-    //special "help help" case;
-    if (stdin == "helpdir"){
-      stdout = "<strong>help</strong>: help will help you if you need help.";
-      return(stdout);
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //give specific help on [stdin]
+        //uses help function instead each CLI_menu function
+        (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
+        return (stdout);
+      },
+      'help': function(stdin) { //required option
+        //big help statement
+        stdout = '<br />HELP: HELP []<br />' + '<br  />  HELP : List all avalible commands with short help<br />  HELP [COMMAND] : Displays larger help for a give command.';
+      },
+      '': function(stdin) {
+        //list all help
+        //uses helpdir function instead each CLI_menu function
+        $.each(CLI_Menu, function(key, value) {
+          if (key != "default") {
+            value = CLI_Menu[key]("helpdir");
+            stdout = stdout + value + '<br />';
+          }
+        });
+        stdout = '<br />Available commands:<br />' + stdout + '<br />';
+      }
+    };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = CLI_Menu; //help function differs here from normal functions.
+        return (stdout);
+        break;
+      case 'helpdir': //required option
+        //oneliner help statement
+        stdout = "<strong>help</strong>: help will help you if you need help.";
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
     }
-    if (stdin.length > 0) {
-      //give specific help on [stdin]
-      //uses help function instead each CLI_menu function
-      (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
-    } else {
-      //list all help
-      //uses helpdir function instead each CLI_menu function
-      var helplist = "";
-      $.each(CLI_Menu, function(key, value) {
-        if (key != "default") {
-          value = CLI_Menu[key]("helpdir");
-          helplist = helplist + value + '<br />';
-        }
-      });
-      stdout = '<br />Available commands:<br />' + helplist + '<br />';
-      BasicFunctions.echo(stdout);
-    }
-    return(stdout);
+
+    //normally required echo of stdout
+    BasicFunctions.echo(stdout);
+
+    //required return of stdout
+    return (stdout);
   },
   timestamp:function(stdin){
     /*gives the current time in various forms
@@ -175,7 +370,7 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+    stdin = stdin.toLowerCase();
     //function variables
     var d = new Date();
 
@@ -231,38 +426,63 @@ var BasicFunctions = {
 
     //required return of stdout
     return (stdout);
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   },
   init_menu:function(stdin){
     /*Adds the BasicFunctions options to the
       command line menu.
     */
-    var stdout = ""
-    stdout = {
-        'default': function(stdin) {
-          return BasicFunctions.echo('ERROR:Command not recognised');
-        },
-        'about': function(stdin) {
-          return BasicFunctions.about(stdin);
-        },
-        'clear': function(stdin) {
-          return BasicFunctions.cls(stdin);
-        },
-        'connect': function(stdin) {
-          return BasicFunctions.connect(stdin);
-        },
-        'echo': function(stdin) {
-          return BasicFunctions.echo(stdin);
-        },
-        'hacker': function(stdin) {
-          return BasicFunctions.hacker(stdin);
-        },
-        'help': function(stdin) {
-          return BasicFunctions.help(stdin);
-        },
-        'time': function(stdin) {
-          return BasicFunctions.timestamp(stdin);
-        }
+
+    //required variable
+    var stdout = "";
+    var function_menu = "";
+    stdin = stdin.toLowerCase();
+    //function variables
+
+    //function_menu structure
+    function_menu = {
+      'default': function(stdin) { //required option
+        //default option
+        return BasicFunctions.echo('ERROR:Command not recognised');
+      },
+      /* function specific options */
+      'about': function(stdin) {
+        return BasicFunctions.about(stdin);
+      },
+      'clear': function(stdin) {
+        return BasicFunctions.cls(stdin);
+      },
+      'connect': function(stdin) {
+        return BasicFunctions.connect(stdin);
+      },
+      'echo': function(stdin) {
+        return BasicFunctions.echo(stdin);
+      },
+      'hacker': function(stdin) {
+        return BasicFunctions.hacker(stdin);
+      },
+      'help': function(stdin) {
+        return BasicFunctions.help(stdin);
+      },
+      'time': function(stdin) {
+        return BasicFunctions.timestamp(stdin);
+      }
     };
+
+    //Additional 'hidden menu' options
+    switch (stdin){
+      case 'function_menu': //required option
+        //sends internal function_menu out of stdout - used for tabcomplete
+        stdout = function_menu;
+        return (stdout);
+        break;
+      default:
+        //default is to look up function_menu
+        (function_menu[stdin]|| function_menu['default'])(stdin);
+        break;
+    }
+
+    //required return of stdout
     return (stdout);
   }
 };
