@@ -319,7 +319,9 @@ var BasicFunctions = {
       'default': function(stdin) { //required option
         //give specific help on [stdin]
         //uses help function instead each CLI_menu function
-        (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
+        echosetting = false;
+        stdout = (CLI_Menu[stdin]|| CLI_Menu['default'])('help');
+        echosetting = true;
         return (stdout);
       },
       'help': function(stdin) { //required option
