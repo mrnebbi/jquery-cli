@@ -379,7 +379,7 @@ var BasicFunctions = {
     function_menu = {
       'default': function(stdin) { //required option
         //default option
-        stdout = "ERROR: Command not understood " + stdin;
+        stdout = "ERROR: Command not understood [<i>" + stdin + "</i>]";
       },
       'help': function(stdin) { //required option
         //big help statement
