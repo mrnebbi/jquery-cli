@@ -190,7 +190,7 @@ var BasicFunctions = {
     //required variable
     var stdout = "";
     var function_menu = "";
-    stdin = stdin.toLowerCase();
+    //stdin = stdin.toLowerCase();
     //function variables
 
     //function_menu structure
@@ -238,7 +238,7 @@ var BasicFunctions = {
         break;
       default:
         //default is to look up function_menu
-        (function_menu[stdin]|| function_menu['default'])(stdin);
+        (function_menu[stdin.toLowerCase()]|| function_menu['default'])(stdin);
         break;
     }
 
