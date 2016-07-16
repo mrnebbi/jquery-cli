@@ -5,6 +5,17 @@
  * @status Adds a class name to your output, allowing you style based on status types, etc.
  */
 
+//Global Variables
+ var connection = false; // Boolean to tell the system if a server connection has been made
+ var echosetting = true; //echo nominaly set as true
+ //create a global variable for the CLI_Menu
+ var CLI_Menu = {
+   	'default': function() {
+ 			//initial menu only has default option on creation
+ 			BasicFunctions.echo('ERROR:Command not recognised');
+ 		}
+ };
+
 function logger(string,logID,status) {
 	var terminal = '#terminal'; // ID of your output container. e.g. #terminal
 
@@ -27,23 +38,17 @@ function logger(string,logID,status) {
 	$(terminal).scrollTop(900000);
 }
 
-
-var connection = false; // Boolean to tell the system if a server connection has been made
-var echosetting = true; //echo nominaly set as true
-//create a global variable for the CLI_Menu
-var CLI_Menu = {
-  	'default': function() {
-			//initial menu only has default option on creation
-			BasicFunctions.echo('ERROR:Command not recognised');
-		}
-};
+function menubuilder(ext_menu){
+	CLI_Menu = BasicFunctions.init_menu('function_menu')
+	$.extend(CLI_Menu,ext_menu);
+}
 
 var CMDPROMPT = {
 	init:function() {
 		// Initialise the command prompt window, and begin listening for key presses.
 
 		// Initialise the CLI with BasicFunctions
-		CLI_Menu = BasicFunctions.init_menu('function_menu');
+		menubuilder();
 
 		//Print Header message on cmd
 		logger('Application version: ' + version);
@@ -154,7 +159,7 @@ var CMDPROMPT = {
 								tabitem = key;
 								tablist = key;
 							}else{
-								tablist = tablist +'<br />'+ key;
+								tablist = tablist +'  :  '+ key;
 							}
 						}
 					});
