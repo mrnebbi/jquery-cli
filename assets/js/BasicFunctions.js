@@ -130,7 +130,17 @@ var BasicFunctions = {
     function_menu = {
       'default': function(stdin) { //required option
         //default option
-        stdout = 'Could not connect to: ' + stdin + '.<br /> Application has not been setup to connect to a server.';
+        switch (stdin){
+          case 'demo':
+            //load game
+            BasicFunctions.echo ('Connecting ...');
+            DemoFunctions.init_menu('function_menu');
+            stdout = 'Connected!';
+            break;
+          default:
+            stdout = 'Could not connect to: ' + stdin + '.<br /> Application has not been setup to connect to a server.';
+            break;
+        }
       },
       'help': function(stdin) { //required option
         //big help statement
@@ -138,7 +148,7 @@ var BasicFunctions = {
       },
       '': function(stdin) {
         //prompt for server address
-        stdout = 'Please give a server address <br /> e.g: Connect MyEpicServer';
+        stdout = 'Please give a server address <br /> e.g: Connect Demo';
       }
     };
 
