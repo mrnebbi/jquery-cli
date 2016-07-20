@@ -2,12 +2,15 @@
 * Game1, by Gavin Barnett
 * Used for Testing the idea of a basic Text Adventure Game
 */
+var current_location = {"x":0, "y":0};
+//x: west (-), east (+)
+//y: south(-), north (+)
 
 var Game1 = {
 /*These are the Game CLI function
   Please keep in alphabetical order for my OCD :-D
 */
-  game1:function(stdin){
+  go_direction:function(stdin){
     /*demo comments;
     */
 
@@ -21,16 +24,44 @@ var Game1 = {
     function_menu = {
       'default': function(stdin) { //required option
         //default option
-        stdout = "ERROR: This is not a valid command. Please see 'Game1 Help'";
+        stdout = "ERROR: This is not a valid command. Please see 'Go Help'";
       },
       'help': function(stdin) { //required option
         //big help statement
-        stdout = '<br />HELP: []<br />' + "<br  />  GAME1 : There is no help for this Game, you're on your own! <br />";
+        stdout = '<br />HELP: GO []<br />' + "<br  />  GO [North/South/East/West]: Go is used to move around the game world. <br />";
       },
       /* function specific options */
+      'north': function(stdin) {
+        //travel north
+        if (stdin != "function_menu"){
+          current_location.y += 1;
+          stdout = "You travel North. Current Location: " + current_location["x"] + ", " + current_location["y"];
+        }
+      },
+      'south': function(stdin) {
+        //travel north
+        if (stdin != "function_menu"){
+          current_location.y -= 1;
+          stdout = "You travel North. Current Location: " + current_location["x"] + ", " + current_location["y"];
+        }
+      },
+      'east': function(stdin) {
+        //travel north
+        if (stdin != "function_menu"){
+          current_location.x += 1;
+          stdout = "You travel North. Current Location: " + current_location["x"] + ", " + current_location["y"];
+        }
+      },
+      'west': function(stdin) {
+        //travel north
+        if (stdin != "function_menu"){
+          current_location.x -= 1;
+          stdout = "You travel North. Current Location: " + current_location["x"] + ", " + current_location["y"];
+        }
+      },
       '': function(stdin) {
         //display general about information
-        stdout = "You are playing Game1. Try taking a walk around";
+        stdout = "Go where?";
       }
     };
 
@@ -43,7 +74,7 @@ var Game1 = {
         break;
       case 'helpdir': //required option
         //oneliner help statement
-        stdout = "<strong>game1</strong>: Every game starts somewhere. In this particular case, somewhere is right here.";
+        stdout = "<strong>go</strong>: use go comand to travel around the world.";
         return (stdout);
         break;
       default:
@@ -73,8 +104,8 @@ var Game1 = {
     //function_menu structure
     function_menu = {
       /* function specific options */
-      'game1': function(stdin) {
-        return Game1.game1(stdin);
+      'go': function(stdin) {
+        return Game1.go_direction(stdin);
       }
     };
 
