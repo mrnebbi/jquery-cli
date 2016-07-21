@@ -31,7 +31,7 @@ function logger(string,logID,status) {
 		} else {
 			$(terminal + ' ul').append('<li id="logger-id-' + logID + '"'  + status + '><span class="caller">' + arguments.callee.caller.name + '</span>' + string + '</li>');
 		}
-
+    
 	} else {
 		$(terminal + ' ul').append('<font color = lightblue><li' + status + '><span class="caller">' + arguments.callee.caller.name + '</span></font> ' + string + '</li>');
 	};

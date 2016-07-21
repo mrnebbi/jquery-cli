@@ -3,6 +3,7 @@
 * Used for Testing the idea of a basic Text Adventure Game
 */
 var current_location = {"x":0, "y":0};
+var worldmap = [];
 //x: west (-), east (+)
 //y: south(-), north (+)
 
@@ -166,7 +167,39 @@ var Game1 = {
     //required return of stdout
     return (stdout);
   },
-
+  init_world:function(stdin){
+    /*generates the initial game world*/
+    var stdout = '';
+    var vrt = [];
+    for (x = 0; x<10; x++){
+      worldmap[x]=[];
+      stdout = '';
+      for (y = 0; y<10; y++){
+        vrt[y]=Math.round(Math.random()*3);
+        switch (vrt[y]){
+          case 0:
+            vrt[y] = '<font color = green>*</font>';
+            break;
+          case 1:
+            vrt[y] = '<font color = grey>^</font>';
+            break;
+          case 2:
+            vrt[y] = '<font color = orange>H</font>';
+            break;
+          case 3:
+            vrt[y] = '<font color = blue>&</font>';
+            break;
+          default:
+            vrt[y] = ' ';
+            break;
+        }
+      }
+      worldmap[x][y] = vrt;
+      stdout = stdout + ' : ' + worldmap[x][y];
+      BasicFunctions.echo(stdout);
+    }
+    return stdout;
+  },
   init_menu:function(stdin){
     /*Adds the BasicFunctions options to the
       command line menu.
@@ -186,6 +219,9 @@ var Game1 = {
       },
       'look': function(stdin) {
         return Game1.look(stdin);
+      },
+      'start':function(stdin){
+        return Game1.init_world(stdin);
       }
     };
 
