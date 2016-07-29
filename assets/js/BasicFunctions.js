@@ -137,6 +137,12 @@ var BasicFunctions = {
             DemoFunctions.init_menu('function_menu');
             stdout = 'Connected!';
             break;
+          case 'game1':
+            //load game
+            BasicFunctions.echo ('Connecting ...');
+            Game1.init_menu('function_menu');
+            stdout = 'Connected!';
+            break;
           default:
             stdout = 'Could not connect to: ' + stdin + '.<br /> Application has not been setup to connect to a server.';
             break;
