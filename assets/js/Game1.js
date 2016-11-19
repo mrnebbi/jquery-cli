@@ -3,7 +3,7 @@
 * Used for Testing the idea of a basic Text Adventure Game
 */
 var current_location = {"x":0, "y":0};
-var worldmap = [];
+var seed = 0;
 //x: west (-), east (+)
 //y: south(-), north (+)
 
@@ -18,9 +18,11 @@ var Game1 = {
     //required variable
     var stdout = "";
     var function_menu = "";
-
+  
     //function variables
-
+    if (seed = 0){
+      stdout = Game1.init_world();
+    }
     //function_menu structure
     function_menu = {
       'default': function(stdin) { //required option
@@ -36,28 +38,28 @@ var Game1 = {
         //travel north
         if (stdin != "function_menu"){
           current_location.y += 1;
-          stdout = "You travel North. Current Location: " + current_location["x"] + ", " + current_location["y"];
+          stdout = "You travel North. Altitude: " + Altitude(current_location.x,current_location.y);
         }
       },
       'south': function(stdin) {
         //travel south
         if (stdin != "function_menu"){
           current_location.y -= 1;
-          stdout = "You travel South. Current Location: " + current_location["x"] + ", " + current_location["y"];
+          stdout = "You travel South. Altitude: " + Altitude(current_location.x,current_location.y);
         }
       },
       'east': function(stdin) {
         //travel east
         if (stdin != "function_menu"){
           current_location.x += 1;
-          stdout = "You travel East. Current Location: " + current_location["x"] + ", " + current_location["y"];
+          stdout = "You travel East. Altitude: " + Altitude(current_location.x,current_location.y);
         }
       },
       'west': function(stdin) {
         //travel west
         if (stdin != "function_menu"){
           current_location.x -= 1;
-          stdout = "You travel West. Current Location: " + current_location["x"] + ", " + current_location["y"];
+          stdout = "You travel West. Altitude: " + Altitude(current_location.x,current_location.y);
         }
       },
       '': function(stdin) {
@@ -167,37 +169,53 @@ var Game1 = {
     //required return of stdout
     return (stdout);
   },
-  init_world:function(stdin){
-    /*generates the initial game world*/
-    var stdout = '';
-    var vrt = [];
-    for (x = 0; x<10; x++){
-      worldmap[x]=[];
-      stdout = '';
-      for (y = 0; y<10; y++){
-        vrt[y]=Math.round(Math.random()*3);
-        switch (vrt[y]){
-          case 0:
-            vrt[y] = '<font color = green>*</font>';
-            break;
-          case 1:
-            vrt[y] = '<font color = grey>^</font>';
-            break;
-          case 2:
-            vrt[y] = '<font color = orange>H</font>';
-            break;
-          case 3:
-            vrt[y] = '<font color = blue>&</font>';
-            break;
-          default:
-            vrt[y] = ' ';
-            break;
-        }
-      }
-      worldmap[x][y] = vrt;
-      stdout = stdout + ' : ' + worldmap[x][y];
-      BasicFunctions.echo(stdout);
+  Altitude:function(x,y){
+    //procedural mapgen
+    /*
+    This code uses multiple (currently 10) 
+    sine waves for x and the same for y
+    to generate a procedural altitude map.
+    This is not limited to integers.
+    */
+    var X = 0, Y = 0, P = Math.PI;
+    var f = 0, A = 0, O =0, Amax = 0;
+    var j = 0;
+    for (i = 0; i < 10; i++) {
+        j = i+1;
+        f = Math.abs((1/(5000))*(Math.pow(3,i))*Math.sin(seed*(j)));
+        A = Math.abs(Math.sin(seed*(3*j))/Math.pow(f,0.8));
+        O = 2*P*Math.sin(seed*12.4);
+        X += A*Math.sin(2*P*f*x+O);
+        Amax += A;
     }
+    for (i = 0; i < 10; i++) {
+        j = i+1;
+        f = Math.abs((1/(5000))*(Math.pow(3,i))*Math.sin(seed*7*j));
+        A = Math.abs(Math.sin(seed*(2.5*j))/Math.pow(f,0.8));
+        O = 2*P*Math.sin(seed*12.4);
+        Y += A*Math.sin(2*P*f*y+O);
+        Amax += A;
+    }
+    return (1000*((X+Y)/Amax));
+  },
+  init_world:function(stdin){
+    /*generates the initial game world seed*/
+    var stdout = "";
+    var trial = 0;
+    var minalt = 10;
+    var maxalt = 100;
+    var foundpos = false;
+    do{
+      seed = Math.random()*10;
+      trial = 0;
+      do {
+        current_location = {x:Math.random()*10000,y:Math.random()*10000};
+        trial += 1;
+        alt = Game1.Altitude(current_location.x,current_location.y);
+        foundpos = ((minalt<alt && alt<maxalt) || trial>50);
+      } while (foundpos==false);
+      //if not found in trial period then change seed and re-try
+  } while (trial>50);
     return stdout;
   },
   init_menu:function(stdin){
