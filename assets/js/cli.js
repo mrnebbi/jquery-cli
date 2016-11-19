@@ -52,7 +52,12 @@ var CMDPROMPT = {
 
 		//Print Header message on cmd
 		logger('Application version: ' + version);
-
+		
+		//keeps focus on input box (cmd element)
+		$('#terminal').click(function(event) {
+			$('.cmd').focus();
+		});
+		
 		//on keystroke check for special keys
 		$('.cmd').keydown(function(event) {
 				switch(event.which) {
