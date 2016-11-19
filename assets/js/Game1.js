@@ -20,7 +20,7 @@ var Game1 = {
     var function_menu = "";
   
     //function variables
-    if (seed = 0){
+    if (seed == 0){
       stdout = Game1.init_world();
     }
     //function_menu structure
