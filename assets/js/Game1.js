@@ -38,28 +38,28 @@ var Game1 = {
         //travel north
         if (stdin != "function_menu"){
           current_location.y += 1;
-          stdout = "You travel North. Altitude: " + Altitude(current_location.x,current_location.y);
+          stdout = "You travel North. Altitude: " + Game1.Altitude(current_location.x,current_location.y);
         }
       },
       'south': function(stdin) {
         //travel south
         if (stdin != "function_menu"){
           current_location.y -= 1;
-          stdout = "You travel South. Altitude: " + Altitude(current_location.x,current_location.y);
+          stdout = "You travel South. Altitude: " +Game1.Altitude(current_location.x,current_location.y);
         }
       },
       'east': function(stdin) {
         //travel east
         if (stdin != "function_menu"){
           current_location.x += 1;
-          stdout = "You travel East. Altitude: " + Altitude(current_location.x,current_location.y);
+          stdout = "You travel East. Altitude: " + Game1.Altitude(current_location.x,current_location.y);
         }
       },
       'west': function(stdin) {
         //travel west
         if (stdin != "function_menu"){
           current_location.x -= 1;
-          stdout = "You travel West. Altitude: " + Altitude(current_location.x,current_location.y);
+          stdout = "You travel West. Altitude: " + Game1.Altitude(current_location.x,current_location.y);
         }
       },
       '': function(stdin) {
